@@ -134,3 +134,33 @@ def send_request(
         if isinstance(e.reason, socket.timeout):
             raise TimeoutError(f"Request to {url} timed out after {timeout}s") from e
         raise ConnectionError(f"Failed to connect to {url}: {e.reason}") from e
+
+
+def prepare_headers_for_body(
+    headers: dict[str, str], body: Optional[bytes]
+) -> dict[str, str]:
+    """
+    Prepare headers for a request body, ensuring Content-Length is correct.
+
+    When injecting payloads into request bodies, the Content-Length header
+    must be updated to match the actual body size. This helper ensures
+    the header is correctly set.
+
+    Args:
+        headers: Original request headers
+        body: Request body (or None for bodiless requests)
+
+    Returns:
+        New dict with Content-Length set if body is provided
+
+    Example:
+        >>> headers = {'User-Agent': 'test'}
+        >>> body = b'injected payload'
+        >>> prepared = prepare_headers_for_body(headers, body)
+        >>> prepared['Content-Length']
+        '16'
+    """
+    result = dict(headers)
+    if body is not None:
+        result["Content-Length"] = str(len(body))
+    return result
