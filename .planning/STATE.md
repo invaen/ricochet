@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 8 of 8 (Triggers & Reporting)
-Plan: 3 of 5 in current phase
+Plan: 4 of 5 in current phase
 Status: In progress
-Last activity: 2026-01-30 - Completed 08-03-PLAN.md (trigger suggestions)
+Last activity: 2026-01-30 - Completed 08-04-PLAN.md (XSS metadata capture)
 
-Progress: [██████████████████████████████] 94%
+Progress: [███████████████████████████████] 96%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 20
-- Average duration: 2.3 min
-- Total execution time: 45 min
+- Total plans completed: 21
+- Average duration: 2.2 min
+- Total execution time: 47 min
 
 **By Phase:**
 
@@ -103,6 +103,9 @@ Recent decisions affecting current work:
 - [08-03]: Fuzzy parameter matching via substring normalization
 - [08-03]: 10 parameter patterns in TRIGGER_MAP (name, comment, message, etc.)
 - [08-03]: Deduplication by location in suggestions
+- [08-04]: Context "html:exfil" distinguishes exfil from simple callback payloads
+- [08-04]: DOM truncated to 50KB in payloads to prevent memory issues
+- [08-04]: Cookies truncated to 100 chars in text output for readability
 
 ### Pending Todos
 
@@ -115,5 +118,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Completed 08-03-PLAN.md
+Stopped at: Completed 08-04-PLAN.md
 Resume file: None
