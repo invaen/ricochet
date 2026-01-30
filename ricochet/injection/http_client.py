@@ -57,6 +57,7 @@ def send_request(
     timeout: float = 10.0,
     verify_ssl: bool = True,
     follow_redirects: bool = True,
+    proxy_url: Optional[str] = None,
 ) -> HttpResponse:
     """
     Send an HTTP request with custom method, headers, and body.
@@ -69,6 +70,7 @@ def send_request(
         timeout: Request timeout in seconds (must be > 0)
         verify_ssl: If False, disable SSL certificate verification
         follow_redirects: If False, don't follow 3xx redirects
+        proxy_url: Optional HTTP proxy URL (e.g., http://127.0.0.1:8080)
 
     Returns:
         HttpResponse with status, reason, headers, body, and final URL
@@ -91,6 +93,17 @@ def send_request(
 
     # Build list of handlers for the opener
     handlers: list = []
+
+    # Proxy handler (must be added before HTTPS handler)
+    if proxy_url:
+        proxy_handler = urllib.request.ProxyHandler({
+            'http': proxy_url,
+            'https': proxy_url,
+        })
+        handlers.append(proxy_handler)
+    else:
+        # Disable environment proxy detection when no proxy specified
+        handlers.append(urllib.request.ProxyHandler({}))
 
     # SSL context for unverified connections
     if not verify_ssl:
