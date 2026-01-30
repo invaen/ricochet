@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 8 of 8 (Triggers & Reporting)
-Plan: 0 of ? in current phase
-Status: Ready for planning
-Last activity: 2026-01-30 - Phase 7 verified and complete
+Plan: 2 of 5 in current phase
+Status: In progress
+Last activity: 2026-01-30 - Completed 08-02-PLAN.md (active trigger probing)
 
-Progress: [████████████████████████████░░] 88%
+Progress: [█████████████████████████████░] 92%
 
 ## Performance Metrics
 
@@ -96,6 +96,7 @@ Recent decisions affecting current work:
 - [07-02]: JSONL format (one JSON object per line) for pipeline compatibility
 - [07-02]: Severity icons: [!]=high, [+]=medium, [*]=low, [-]=info
 - [07-02]: Logs to stderr, findings to stdout for stream separation
+- [08-02]: Default rate 2.0 req/s for active probing (slower for admin panels)
 
 ### Pending Todos
 
@@ -108,5 +109,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Completed 07-02-PLAN.md (Phase 7 complete)
+Stopped at: Completed 08-02-PLAN.md
 Resume file: None
