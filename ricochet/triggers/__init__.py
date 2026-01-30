@@ -10,19 +10,10 @@ from ricochet.triggers.polling import (
     PollingStrategy,
     poll_for_callbacks,
 )
-from ricochet.triggers.suggestions import (
-    TRIGGER_MAP,
-    TriggerSuggester,
-    TriggerSuggestion,
-)
 
 __all__ = [
     # Passive polling
     "PollingConfig",
     "PollingStrategy",
     "poll_for_callbacks",
-    # Suggestions
-    "TRIGGER_MAP",
-    "TriggerSuggester",
-    "TriggerSuggestion",
 ]
