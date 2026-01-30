@@ -145,14 +145,14 @@ Plans:
   3. Tool suggests likely trigger points based on injection context
   4. When XSS fires, callback captures DOM, cookies, URL, user-agent
   5. User can generate bug bounty report with PoC steps
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 08-01: Passive polling mode
-- [ ] 08-02: Active trigger engine
-- [ ] 08-03: Trigger suggestions logic
-- [ ] 08-04: XSS metadata capture
-- [ ] 08-05: Bug bounty report generator
+- [ ] 08-01-PLAN.md — Passive polling mode with exponential backoff
+- [ ] 08-02-PLAN.md — Active trigger engine with admin endpoint probing
+- [ ] 08-03-PLAN.md — Trigger suggestions based on injection context
+- [ ] 08-04-PLAN.md — XSS metadata capture (DOM, cookies, URL, user-agent)
+- [ ] 08-05-PLAN.md — Bug bounty report generator (markdown format)
 
 ## Progress
 
@@ -168,4 +168,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 5. Crawler & Payloads | 2/2 | Complete | 2026-01-30 |
 | 6. Vulnerability Payloads | 4/4 | Complete | 2026-01-30 |
 | 7. Correlation & Output | 3/3 | Complete | 2026-01-30 |
-| 8. Triggers & Reporting | 0/5 | Not started | - |
+| 8. Triggers & Reporting | 0/5 | Ready for execution | - |
