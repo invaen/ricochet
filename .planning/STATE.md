@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-29)
 
 **Core value:** Detect vulnerabilities that execute in a different context than where they were injected
-**Current focus:** Phase 3 - Payload Generation (next)
+**Current focus:** Phase 3 - DNS & External Callbacks
 
 ## Current Position
 
-Phase: 2 of 8 (HTTP Callback Server)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-01-30 - Completed 02-02-PLAN.md
+Phase: 3 of 8 (DNS & External Callbacks)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-01-30 - Completed 03-01-PLAN.md
 
-Progress: [====                ] 18%
+Progress: [=====               ] 23%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 2.3 min
-- Total execution time: 9 min
+- Total plans completed: 5
+- Average duration: 2.2 min
+- Total execution time: 11 min
 
 **By Phase:**
 
@@ -29,9 +29,10 @@ Progress: [====                ] 18%
 |-------|-------|-------|----------|
 | 1 | 2/2 | 5 min | 2.5 min |
 | 2 | 2/2 | 4 min | 2.0 min |
+| 3 | 1/2 | 2 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 2, 3, 2, 2 min
+- Last 5 plans: 3, 2, 2, 2 min
 - Trend: Consistent ~2 min/plan
 
 *Updated after each plan completion*
@@ -54,6 +55,9 @@ Recent decisions affecting current work:
 - [02-01]: 0.5s server timeout for responsive shutdown
 - [02-02]: Lazy import of server module for fast CLI startup
 - [02-02]: Exit code 2 for missing --http flag (argument error)
+- [03-01]: Extract correlation ID from first subdomain label for DNS callbacks
+- [03-01]: Always respond with 127.0.0.1 for A queries (prevents enumeration)
+- [03-01]: Default DNS port 5353 (high port, no root required)
 
 ### Pending Todos
 
@@ -66,5 +70,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Completed 02-02-PLAN.md (Phase 2 complete)
+Stopped at: Completed 03-01-PLAN.md
 Resume file: None
