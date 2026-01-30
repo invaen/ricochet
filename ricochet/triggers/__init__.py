@@ -1,15 +1,10 @@
 """
 Triggers module for second-order vulnerability detection.
 
-Active triggering probes common execution contexts (admin panels, etc.).
 Passive triggering polls for callbacks after injection.
+Active triggering (future) probes common execution contexts.
 """
 
-from ricochet.triggers.active import (
-    ActiveTrigger,
-    TRIGGER_ENDPOINTS,
-    TriggerResult,
-)
 from ricochet.triggers.polling import (
     PollingConfig,
     PollingStrategy,
@@ -22,10 +17,6 @@ from ricochet.triggers.suggestions import (
 )
 
 __all__ = [
-    # Active triggering
-    "ActiveTrigger",
-    "TRIGGER_ENDPOINTS",
-    "TriggerResult",
     # Passive polling
     "PollingConfig",
     "PollingStrategy",
