@@ -35,7 +35,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — CLI skeleton with argparse subcommand structure
+- [x] 01-01-PLAN.md — CLI skeleton with argparse subcommand structure
 - [ ] 01-02-PLAN.md — SQLite persistence layer for injection/callback tracking
 
 ### Phase 2: HTTP Callback Server
@@ -161,7 +161,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/2 | Ready for execution | - |
+| 1. Foundation | 1/2 | In progress | - |
 | 2. HTTP Callback Server | 0/2 | Not started | - |
 | 3. DNS & External Callbacks | 0/2 | Not started | - |
 | 4. Injection Engine | 0/3 | Not started | - |
