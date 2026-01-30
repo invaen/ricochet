@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Injection Engine** - HTTP client, request parsing, Burp format support
 - [x] **Phase 5: Crawler & Payloads** - Auto-discovery crawling, custom payload loading
 - [x] **Phase 6: Vulnerability Payloads** - XSS, SQLi, SSTI payload generation with polyglots
-- [ ] **Phase 7: Correlation & Output** - Match callbacks to injections, JSON/text/verbose output
+- [x] **Phase 7: Correlation & Output** - Match callbacks to injections, JSON/text/verbose output
 - [ ] **Phase 8: Triggers & Reporting** - Passive/active trigger modes, bug bounty reports
 
 ## Phase Details
@@ -131,9 +131,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Callback-injection correlation engine with Finding dataclass
-- [ ] 07-02-PLAN.md — Output formatters (JSON, text) and findings CLI command
-- [ ] 07-03-PLAN.md — HTTP proxy support integration
+- [x] 07-01-PLAN.md — Callback-injection correlation engine with Finding dataclass
+- [x] 07-02-PLAN.md — Output formatters (JSON, text) and findings CLI command
+- [x] 07-03-PLAN.md — HTTP proxy support integration
 
 ### Phase 8: Triggers & Reporting
 **Goal**: Tool helps trigger payload execution and generates bug bounty reports
@@ -167,5 +167,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 4. Injection Engine | 3/3 | Complete | 2026-01-30 |
 | 5. Crawler & Payloads | 2/2 | Complete | 2026-01-30 |
 | 6. Vulnerability Payloads | 4/4 | Complete | 2026-01-30 |
-| 7. Correlation & Output | 0/3 | Planned | - |
+| 7. Correlation & Output | 3/3 | Complete | 2026-01-30 |
 | 8. Triggers & Reporting | 0/5 | Not started | - |

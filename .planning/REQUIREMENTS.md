@@ -38,10 +38,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Output & Reporting
 
-- [ ] **OUT-01**: Tool outputs findings in JSON format for automation
-- [ ] **OUT-02**: Tool outputs findings in human-readable plain text
-- [ ] **OUT-03**: Tool supports verbose/debug modes showing payloads and responses
-- [ ] **OUT-04**: Tool supports routing traffic through HTTP proxy (Burp integration)
+- [x] **OUT-01**: Tool outputs findings in JSON format for automation
+- [x] **OUT-02**: Tool outputs findings in human-readable plain text
+- [x] **OUT-03**: Tool supports verbose/debug modes showing payloads and responses
+- [x] **OUT-04**: Tool supports routing traffic through HTTP proxy (Burp integration)
 - [ ] **OUT-05**: Tool generates bug bounty ready reports with PoC steps
 
 ### Core Infrastructure
@@ -105,10 +105,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TRIG-01 | Phase 8 | Pending |
 | TRIG-02 | Phase 8 | Pending |
 | TRIG-03 | Phase 8 | Pending |
-| OUT-01 | Phase 7 | Pending |
-| OUT-02 | Phase 7 | Pending |
-| OUT-03 | Phase 7 | Pending |
-| OUT-04 | Phase 7 | Pending |
+| OUT-01 | Phase 7 | Complete |
+| OUT-02 | Phase 7 | Complete |
+| OUT-03 | Phase 7 | Complete |
+| OUT-04 | Phase 7 | Complete |
 | OUT-05 | Phase 8 | Pending |
 | CORE-01 | Phase 1 | Complete |
 | CORE-02 | Phase 1 | Complete |
@@ -123,4 +123,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-30 after Phase 6 completion*
+*Last updated: 2026-01-30 after Phase 7 completion*
