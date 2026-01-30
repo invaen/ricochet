@@ -78,12 +78,12 @@ Plans:
   3. Tool injects into all input vectors (query params, headers, body fields)
   4. User can configure request timeouts
   5. Tool respects rate limiting to avoid target bans
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: HTTP client with timeout and rate limiting
-- [ ] 04-02: Burp request file parser
-- [ ] 04-03: Multi-vector injection logic
+- [ ] 04-01-PLAN.md — HTTP client with timeout and rate limiting
+- [ ] 04-02-PLAN.md — Burp request file parser and vector extraction
+- [ ] 04-03-PLAN.md — Multi-vector injection logic and CLI wiring
 
 ### Phase 5: Crawler & Payloads
 **Goal**: Users can auto-discover injection points and use custom payload files
