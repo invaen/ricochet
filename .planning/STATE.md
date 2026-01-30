@@ -71,6 +71,11 @@ Recent decisions affecting current work:
 - [04-03]: Dry-run records injections to database (enables pre-flight verification)
 - [04-03]: SSL verification disabled by default for security testing targets
 - [04-03]: Parameter not found returns exit code 2 with available parameters listed
+- [05-01]: HTMLParser over regex for robust HTML parsing (stdlib, no deps)
+- [05-01]: BFS crawl traversal for breadth-first form discovery
+- [05-01]: CrawlVector dataclass for portable injection point representation
+- [05-01]: Skip binary extensions early to avoid wasted requests
+- [05-01]: Same-domain filtering to prevent crawl scope creep
 - [05-02]: Strip only trailing newlines to preserve payload whitespace
 - [05-02]: Comments start with # (standard wordlist convention)
 - [05-02]: Lazy import of load_payloads for fast CLI startup
