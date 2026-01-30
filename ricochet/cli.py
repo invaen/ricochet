@@ -39,13 +39,55 @@ def create_parser() -> argparse.ArgumentParser:
     )
 
     # Set up subparsers for future commands
-    parser.add_subparsers(
+    subparsers = parser.add_subparsers(
         title='commands',
         dest='command',
         metavar='<command>'
     )
 
+    # Listen command - callback server
+    listen_parser = subparsers.add_parser(
+        'listen',
+        help='Start callback server to receive OOB interactions'
+    )
+    listen_parser.add_argument(
+        '--http',
+        action='store_true',
+        help='Start HTTP callback server'
+    )
+    listen_parser.add_argument(
+        '--host',
+        default='0.0.0.0',
+        help='Host to bind to (default: 0.0.0.0)'
+    )
+    listen_parser.add_argument(
+        '-p', '--port',
+        type=int,
+        default=8080,
+        help='Port to listen on (default: 8080)'
+    )
+    listen_parser.set_defaults(func=cmd_listen)
+
     return parser
+
+
+def cmd_listen(args, store) -> int:
+    """Handle listen subcommand - start callback server.
+
+    Args:
+        args: Parsed command line arguments.
+        store: InjectionStore instance.
+
+    Returns:
+        Exit code (0 for success, 2 for argument errors).
+    """
+    if args.http:
+        from ricochet.server.http import run_callback_server
+        return run_callback_server(args.host, args.port, store)
+    else:
+        print("Error: specify --http to start HTTP callback server", file=sys.stderr)
+        print("  Example: ricochet listen --http", file=sys.stderr)
+        return 2
 
 
 def main() -> int:
