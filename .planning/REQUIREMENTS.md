@@ -26,8 +26,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **INJ-01**: Tool accepts HTTP request files (Burp format) as input
 - [x] **INJ-02**: Tool accepts targeted URL + parameter specification via CLI
-- [ ] **INJ-03**: Tool can crawl target to discover injection points automatically
-- [ ] **INJ-04**: Tool supports loading custom payloads from file
+- [x] **INJ-03**: Tool can crawl target to discover injection points automatically
+- [x] **INJ-04**: Tool supports loading custom payloads from file
 - [x] **INJ-05**: Tool injects payloads into all identified input vectors (params, headers, body)
 
 ### Trigger Mechanisms
@@ -99,8 +99,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | VULN-04 | Phase 6 | Pending |
 | INJ-01 | Phase 4 | Complete |
 | INJ-02 | Phase 4 | Complete |
-| INJ-03 | Phase 5 | Pending |
-| INJ-04 | Phase 5 | Pending |
+| INJ-03 | Phase 5 | Complete |
+| INJ-04 | Phase 5 | Complete |
 | INJ-05 | Phase 4 | Complete |
 | TRIG-01 | Phase 8 | Pending |
 | TRIG-02 | Phase 8 | Pending |
@@ -123,4 +123,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-30 after Phase 4 completion*
+*Last updated: 2026-01-30 after Phase 5 completion*
