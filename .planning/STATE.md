@@ -96,6 +96,9 @@ Recent decisions affecting current work:
 - [07-02]: JSONL format (one JSON object per line) for pipeline compatibility
 - [07-02]: Severity icons: [!]=high, [+]=medium, [*]=low, [-]=info
 - [07-02]: Logs to stderr, findings to stdout for stream separation
+- [08-01]: 5-poll quiet threshold before backoff activates
+- [08-01]: time.monotonic() for timing (consistent with rate_limiter.py)
+- [08-01]: Reuse cmd_inject for passive mode injection phase
 - [08-02]: Default rate 2.0 req/s for active probing (slower for admin panels)
 - [08-03]: Fuzzy parameter matching via substring normalization
 - [08-03]: 10 parameter patterns in TRIGGER_MAP (name, comment, message, etc.)
