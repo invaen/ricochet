@@ -13,7 +13,7 @@ Ricochet progresses from foundational infrastructure through increasingly sophis
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - CLI skeleton, SQLite persistence, zero-deps architecture
-- [ ] **Phase 2: HTTP Callback Server** - Correlation IDs, built-in HTTP callback listener
+- [x] **Phase 2: HTTP Callback Server** - Correlation IDs, built-in HTTP callback listener
 - [ ] **Phase 3: DNS & External Callbacks** - DNS callback server, Interactsh integration
 - [ ] **Phase 4: Injection Engine** - HTTP client, request parsing, Burp format support
 - [ ] **Phase 5: Crawler & Payloads** - Auto-discovery crawling, custom payload loading
@@ -50,8 +50,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — HTTP callback server with ThreadingHTTPServer and correlation ID extraction
-- [ ] 02-02-PLAN.md — CLI listen subcommand wiring and end-to-end verification
+- [x] 02-01-PLAN.md — HTTP callback server with ThreadingHTTPServer and correlation ID extraction
+- [x] 02-02-PLAN.md — CLI listen subcommand wiring and end-to-end verification
 
 ### Phase 3: DNS & External Callbacks
 **Goal**: Users can detect callbacks through DNS (bypasses firewalls) and use Interactsh for real-world testing
@@ -162,7 +162,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-01-30 |
-| 2. HTTP Callback Server | 0/2 | Planning complete | - |
+| 2. HTTP Callback Server | 2/2 | Complete | 2026-01-30 |
 | 3. DNS & External Callbacks | 0/2 | Not started | - |
 | 4. Injection Engine | 0/3 | Not started | - |
 | 5. Crawler & Payloads | 0/2 | Not started | - |
