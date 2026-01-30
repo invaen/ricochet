@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from ricochet import __version__
+from ricochet.core.store import InjectionStore, get_db_path
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -57,6 +58,10 @@ def main() -> int:
         parser = create_parser()
         args = parser.parse_args()
 
+        # Initialize database (creates on first run)
+        db_path = args.db if args.db is not None else get_db_path()
+        store = InjectionStore(db_path)
+
         # If no command given, print help and exit successfully
         if args.command is None:
             parser.print_help()
@@ -64,7 +69,7 @@ def main() -> int:
 
         # Dispatch to subcommand handler if one is set
         if hasattr(args, 'func'):
-            return args.func(args)
+            return args.func(args, store)
 
         return 0
 
