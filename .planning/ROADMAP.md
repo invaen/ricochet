@@ -94,11 +94,11 @@ Plans:
   2. Crawler discovers forms, URL parameters, and other injection points
   3. User can provide custom payload file with `ricochet inject --payloads payloads.txt`
   4. Custom payloads are injected with correlation IDs appended
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: Target crawler for injection point discovery
-- [ ] 05-02: Custom payload file loading
+- [ ] 05-01-PLAN.md — Target crawler with HTMLParser-based link/form extraction
+- [ ] 05-02-PLAN.md — Custom payload file loading with SecLists/Wfuzz compatibility
 
 ### Phase 6: Vulnerability Payloads
 **Goal**: Tool generates context-appropriate payloads for XSS, SQLi, and SSTI detection
@@ -165,7 +165,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 2. HTTP Callback Server | 2/2 | Complete | 2026-01-30 |
 | 3. DNS & External Callbacks | 2/2 | Complete | 2026-01-30 |
 | 4. Injection Engine | 3/3 | Complete | 2026-01-30 |
-| 5. Crawler & Payloads | 0/2 | Not started | - |
+| 5. Crawler & Payloads | 0/2 | Planned | - |
 | 6. Vulnerability Payloads | 0/4 | Not started | - |
 | 7. Correlation & Output | 0/3 | Not started | - |
 | 8. Triggers & Reporting | 0/5 | Not started | - |
