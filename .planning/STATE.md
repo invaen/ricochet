@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 
 ## Current Position
 
-Phase: 3 of 8 (DNS & External Callbacks) - COMPLETE
-Plan: 2 of 2 in current phase
-Status: Phase verified, ready for Phase 4
-Last activity: 2026-01-30 - Phase 3 verified (6/6 must-haves)
+Phase: 4 of 8 (Injection Engine)
+Plan: 2 of 3 in current phase
+Status: In progress
+Last activity: 2026-01-30 - Completed 04-02-PLAN.md
 
-Progress: [========            ] 37%
+Progress: [=========           ] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 2.2 min
-- Total execution time: 13 min
+- Total plans completed: 8
+- Average duration: 2.1 min
+- Total execution time: 17 min
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [========            ] 37%
 | 1 | 2/2 | 5 min | 2.5 min |
 | 2 | 2/2 | 4 min | 2.0 min |
 | 3 | 2/2 | 4 min | 2.0 min |
+| 4 | 2/3 | 4 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 2, 2, 2, 2 min
+- Last 5 plans: 2, 2, 2, 2, 2 min
 - Trend: Consistent ~2 min/plan
 
 *Updated after each plan completion*
@@ -60,6 +61,9 @@ Recent decisions affecting current work:
 - [03-01]: Default DNS port 5353 (high port, no root required)
 - [03-02]: No RSA+AES encryption - Interactsh public servers unsupported, self-hosted only
 - [03-02]: Placeholder injection records for tracking external callback URLs
+- [04-02]: Bytes-first parsing for CRLF handling (Burp exports)
+- [04-02]: Top-level JSON strings only for v1 (recursive extraction future work)
+- [04-02]: INJECTABLE_HEADERS list for security-relevant header targeting
 
 ### Pending Todos
 
@@ -72,5 +76,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Phase 3 verified, ready for Phase 4
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None

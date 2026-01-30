@@ -81,8 +81,8 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — HTTP client with timeout and rate limiting
-- [ ] 04-02-PLAN.md — Burp request file parser and vector extraction
+- [x] 04-01-PLAN.md — HTTP client with timeout and rate limiting
+- [x] 04-02-PLAN.md — Burp request file parser and vector extraction
 - [ ] 04-03-PLAN.md — Multi-vector injection logic and CLI wiring
 
 ### Phase 5: Crawler & Payloads
@@ -164,7 +164,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 1. Foundation | 2/2 | Complete | 2026-01-30 |
 | 2. HTTP Callback Server | 2/2 | Complete | 2026-01-30 |
 | 3. DNS & External Callbacks | 2/2 | Complete | 2026-01-30 |
-| 4. Injection Engine | 0/3 | Not started | - |
+| 4. Injection Engine | 2/3 | In progress | - |
 | 5. Crawler & Payloads | 0/2 | Not started | - |
 | 6. Vulnerability Payloads | 0/4 | Not started | - |
 | 7. Correlation & Output | 0/3 | Not started | - |
