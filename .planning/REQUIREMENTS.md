@@ -46,9 +46,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Core Infrastructure
 
-- [ ] **CORE-01**: Tool is a CLI application with standard Unix conventions
-- [ ] **CORE-02**: Tool has zero external dependencies (Python stdlib only)
-- [ ] **CORE-03**: Tool persists injection state to SQLite for correlation across sessions
+- [x] **CORE-01**: Tool is a CLI application with standard Unix conventions
+- [x] **CORE-02**: Tool has zero external dependencies (Python stdlib only)
+- [x] **CORE-03**: Tool persists injection state to SQLite for correlation across sessions
 - [ ] **CORE-04**: Tool supports configurable timeouts for requests and callback polling
 - [ ] **CORE-05**: Tool implements rate limiting to avoid bans
 
@@ -110,9 +110,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OUT-03 | Phase 7 | Pending |
 | OUT-04 | Phase 7 | Pending |
 | OUT-05 | Phase 8 | Pending |
-| CORE-01 | Phase 1 | Pending |
-| CORE-02 | Phase 1 | Pending |
-| CORE-03 | Phase 1 | Pending |
+| CORE-01 | Phase 1 | Complete |
+| CORE-02 | Phase 1 | Complete |
+| CORE-03 | Phase 1 | Complete |
 | CORE-04 | Phase 4 | Pending |
 | CORE-05 | Phase 4 | Pending |
 
