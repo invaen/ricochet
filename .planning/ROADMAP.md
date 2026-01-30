@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Crawler & Payloads** - Auto-discovery crawling, custom payload loading
 - [x] **Phase 6: Vulnerability Payloads** - XSS, SQLi, SSTI payload generation with polyglots
 - [x] **Phase 7: Correlation & Output** - Match callbacks to injections, JSON/text/verbose output
-- [ ] **Phase 8: Triggers & Reporting** - Passive/active trigger modes, bug bounty reports
+- [x] **Phase 8: Triggers & Reporting** - Passive/active trigger modes, bug bounty reports
 
 ## Phase Details
 
@@ -148,11 +148,11 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 08-01-PLAN.md — Passive polling mode with exponential backoff
-- [ ] 08-02-PLAN.md — Active trigger engine with admin endpoint probing
-- [ ] 08-03-PLAN.md — Trigger suggestions based on injection context
-- [ ] 08-04-PLAN.md — XSS metadata capture (DOM, cookies, URL, user-agent)
-- [ ] 08-05-PLAN.md — Bug bounty report generator (markdown format)
+- [x] 08-01-PLAN.md — Passive polling mode with exponential backoff
+- [x] 08-02-PLAN.md — Active trigger engine with admin endpoint probing
+- [x] 08-03-PLAN.md — Trigger suggestions based on injection context
+- [x] 08-04-PLAN.md — XSS metadata capture (DOM, cookies, URL, user-agent)
+- [x] 08-05-PLAN.md — Bug bounty report generator (markdown format)
 
 ## Progress
 
@@ -168,4 +168,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 5. Crawler & Payloads | 2/2 | Complete | 2026-01-30 |
 | 6. Vulnerability Payloads | 4/4 | Complete | 2026-01-30 |
 | 7. Correlation & Output | 3/3 | Complete | 2026-01-30 |
-| 8. Triggers & Reporting | 0/5 | Ready for execution | - |
+| 8. Triggers & Reporting | 5/5 | Complete | 2026-01-30 |

@@ -13,7 +13,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CALL-02**: Tool generates unique correlation IDs linking injections to callbacks
 - [x] **CALL-03**: Tool can run its own HTTP callback server for local testing
 - [x] **CALL-04**: Tool can run its own DNS callback server for firewall-bypassing detection
-- [ ] **CALL-05**: When XSS fires, tool captures metadata (DOM snapshot, cookies, URL, user-agent)
+- [x] **CALL-05**: When XSS fires, tool captures metadata (DOM snapshot, cookies, URL, user-agent)
 
 ### Vulnerability Detection
 
@@ -32,9 +32,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Trigger Mechanisms
 
-- [ ] **TRIG-01**: Tool supports passive mode — inject and poll for callbacks
-- [ ] **TRIG-02**: Tool supports active mode — attempt to trigger execution via common endpoints
-- [ ] **TRIG-03**: Tool provides suggestions for likely trigger points based on injection context
+- [x] **TRIG-01**: Tool supports passive mode — inject and poll for callbacks
+- [x] **TRIG-02**: Tool supports active mode — attempt to trigger execution via common endpoints
+- [x] **TRIG-03**: Tool provides suggestions for likely trigger points based on injection context
 
 ### Output & Reporting
 
@@ -42,7 +42,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **OUT-02**: Tool outputs findings in human-readable plain text
 - [x] **OUT-03**: Tool supports verbose/debug modes showing payloads and responses
 - [x] **OUT-04**: Tool supports routing traffic through HTTP proxy (Burp integration)
-- [ ] **OUT-05**: Tool generates bug bounty ready reports with PoC steps
+- [x] **OUT-05**: Tool generates bug bounty ready reports with PoC steps
 
 ### Core Infrastructure
 
@@ -92,7 +92,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CALL-02 | Phase 2 | Complete |
 | CALL-03 | Phase 2 | Complete |
 | CALL-04 | Phase 3 | Complete |
-| CALL-05 | Phase 8 | Pending |
+| CALL-05 | Phase 8 | Complete |
 | VULN-01 | Phase 6 | Complete |
 | VULN-02 | Phase 6 | Complete |
 | VULN-03 | Phase 6 | Complete |
@@ -102,14 +102,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INJ-03 | Phase 5 | Complete |
 | INJ-04 | Phase 5 | Complete |
 | INJ-05 | Phase 4 | Complete |
-| TRIG-01 | Phase 8 | Pending |
-| TRIG-02 | Phase 8 | Pending |
-| TRIG-03 | Phase 8 | Pending |
+| TRIG-01 | Phase 8 | Complete |
+| TRIG-02 | Phase 8 | Complete |
+| TRIG-03 | Phase 8 | Complete |
 | OUT-01 | Phase 7 | Complete |
 | OUT-02 | Phase 7 | Complete |
 | OUT-03 | Phase 7 | Complete |
 | OUT-04 | Phase 7 | Complete |
-| OUT-05 | Phase 8 | Pending |
+| OUT-05 | Phase 8 | Complete |
 | CORE-01 | Phase 1 | Complete |
 | CORE-02 | Phase 1 | Complete |
 | CORE-03 | Phase 1 | Complete |
@@ -123,4 +123,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-30 after Phase 7 completion*
+*Last updated: 2026-01-30 after Phase 8 completion*
