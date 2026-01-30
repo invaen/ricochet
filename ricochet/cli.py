@@ -286,6 +286,96 @@ def create_parser() -> argparse.ArgumentParser:
     )
     findings_parser.set_defaults(func=cmd_findings)
 
+    # Passive command - inject and poll for callbacks
+    passive_parser = subparsers.add_parser(
+        'passive',
+        help='Inject payloads and poll for callbacks (passive mode)'
+    )
+
+    # Target specification (mutually exclusive group)
+    passive_target = passive_parser.add_mutually_exclusive_group(required=True)
+    passive_target.add_argument(
+        '-u', '--url',
+        help='Target URL'
+    )
+    passive_target.add_argument(
+        '-r', '--request',
+        type=Path,
+        help='Burp-format request file'
+    )
+    passive_target.add_argument(
+        '--from-crawl',
+        type=Path,
+        metavar='FILE',
+        help='Use vectors from crawl export JSON file'
+    )
+
+    # Payload options
+    passive_parser.add_argument(
+        '--payload',
+        default='{{CALLBACK}}',
+        help='Payload template with {{CALLBACK}} placeholder (default: {{CALLBACK}})'
+    )
+    passive_parser.add_argument(
+        '--payloads',
+        type=Path,
+        help='File containing payloads (one per line, # for comments)'
+    )
+
+    # Callback configuration
+    passive_parser.add_argument(
+        '--callback-url',
+        default='http://localhost:8080',
+        help='Callback URL base (default: http://localhost:8080)'
+    )
+
+    # Request options
+    passive_parser.add_argument(
+        '--rate',
+        type=float,
+        default=10.0,
+        help='Requests per second (default: 10)'
+    )
+    passive_parser.add_argument(
+        '--timeout',
+        type=float,
+        default=10.0,
+        help='Request timeout in seconds (default: 10)'
+    )
+    passive_parser.add_argument(
+        '--https',
+        action='store_true',
+        help='Use HTTPS for URL construction'
+    )
+
+    # Polling options
+    passive_parser.add_argument(
+        '--poll-interval',
+        type=float,
+        default=5.0,
+        help='Base polling interval in seconds (default: 5.0)'
+    )
+    passive_parser.add_argument(
+        '--poll-timeout',
+        type=float,
+        default=3600.0,
+        help='Total passive mode duration in seconds (default: 3600, 1 hour)'
+    )
+
+    # Other options
+    passive_parser.add_argument(
+        '--proxy',
+        metavar='URL',
+        help='HTTP proxy URL (e.g., http://127.0.0.1:8080)'
+    )
+    passive_parser.add_argument(
+        '--dry-run',
+        action='store_true',
+        help='Show what would be injected without sending requests'
+    )
+
+    passive_parser.set_defaults(func=cmd_passive)
+
     # Active command - probe endpoints to trigger stored payloads
     active_parser = subparsers.add_parser(
         'active',
@@ -560,6 +650,82 @@ def cmd_findings(args, store) -> int:
         output_json(findings, verbose=verbose)
     else:
         output_text(findings, verbose=verbose)
+
+    return 0
+
+
+def cmd_passive(args, store) -> int:
+    """Handle passive subcommand - inject payloads and poll for callbacks.
+
+    This mode combines injection with continuous callback polling.
+    Uses exponential backoff during quiet periods to reduce load.
+
+    Args:
+        args: Parsed command line arguments.
+        store: InjectionStore instance.
+
+    Returns:
+        Exit code (0 for success, 1 for errors, 2 for argument errors).
+    """
+    from ricochet.triggers.polling import PollingConfig, poll_for_callbacks
+    from ricochet.output import output_text
+
+    # First, run injection (reuse inject logic via args)
+    # Create a modified args to call inject
+    inject_result = cmd_inject(args, store)
+
+    if inject_result != 0 and not args.dry_run:
+        # Injection failed, return error
+        return inject_result
+
+    # For dry-run, skip polling
+    if args.dry_run:
+        print()
+        print("Polling skipped (dry-run mode)")
+        return 0
+
+    # Configure polling
+    config = PollingConfig(
+        base_interval=args.poll_interval,
+        max_interval=60.0,
+        backoff_factor=1.5,
+        reset_on_callback=True,
+        timeout=args.poll_timeout,
+    )
+
+    print()
+    print("=== Starting Passive Polling ===")
+    print(f"Base interval: {config.base_interval}s")
+    print(f"Timeout: {config.timeout}s ({config.timeout / 3600:.1f} hour(s))")
+    print("Press Ctrl+C to stop polling early")
+    print()
+
+    # Track findings count
+    findings_seen = 0
+
+    def on_findings(findings):
+        """Handle new findings."""
+        nonlocal findings_seen
+        findings_seen += len(findings)
+        print(f"[+] New callback(s) received! ({len(findings)} finding(s))")
+        output_text(findings, verbose=False)
+
+    # Start polling loop
+    try:
+        total = poll_for_callbacks(
+            store=store,
+            config=config,
+            callback=on_findings,
+        )
+        print()
+        print("=== Polling Complete ===")
+        print(f"Timeout reached after {config.timeout}s")
+        print(f"Total findings: {total}")
+    except KeyboardInterrupt:
+        print()
+        print("=== Polling Interrupted ===")
+        print(f"Total findings: {findings_seen}")
+        return 0
 
     return 0
 
