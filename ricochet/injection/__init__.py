@@ -6,6 +6,7 @@ infrastructure for controlled injection payload delivery.
 """
 
 from ricochet.injection.http_client import HttpResponse, prepare_headers_for_body, send_request
+from ricochet.injection.injector import InjectionResult, Injector, substitute_callback
 from ricochet.injection.parser import (
     ParsedRequest,
     build_url,
@@ -18,7 +19,9 @@ from ricochet.injection.vectors import InjectionVector, extract_vectors
 
 __all__ = [
     "HttpResponse",
+    "InjectionResult",
     "InjectionVector",
+    "Injector",
     "ParsedRequest",
     "RateLimiter",
     "build_url",
@@ -28,4 +31,5 @@ __all__ = [
     "parse_request_string",
     "prepare_headers_for_body",
     "send_request",
+    "substitute_callback",
 ]
