@@ -17,10 +17,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Vulnerability Detection
 
-- [ ] **VULN-01**: Tool detects blind/stored XSS via callback confirmation
-- [ ] **VULN-02**: Tool detects second-order SQL injection via callback confirmation
-- [ ] **VULN-03**: Tool detects SSTI (Server-Side Template Injection) via callback confirmation
-- [ ] **VULN-04**: Tool generates context-appropriate polyglot payloads for each vulnerability type
+- [x] **VULN-01**: Tool detects blind/stored XSS via callback confirmation
+- [x] **VULN-02**: Tool detects second-order SQL injection via callback confirmation
+- [x] **VULN-03**: Tool detects SSTI (Server-Side Template Injection) via callback confirmation
+- [x] **VULN-04**: Tool generates context-appropriate polyglot payloads for each vulnerability type
 
 ### Injection Modes
 
@@ -93,10 +93,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CALL-03 | Phase 2 | Complete |
 | CALL-04 | Phase 3 | Complete |
 | CALL-05 | Phase 8 | Pending |
-| VULN-01 | Phase 6 | Pending |
-| VULN-02 | Phase 6 | Pending |
-| VULN-03 | Phase 6 | Pending |
-| VULN-04 | Phase 6 | Pending |
+| VULN-01 | Phase 6 | Complete |
+| VULN-02 | Phase 6 | Complete |
+| VULN-03 | Phase 6 | Complete |
+| VULN-04 | Phase 6 | Complete |
 | INJ-01 | Phase 4 | Complete |
 | INJ-02 | Phase 4 | Complete |
 | INJ-03 | Phase 5 | Complete |
@@ -123,4 +123,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-30 after Phase 5 completion*
+*Last updated: 2026-01-30 after Phase 6 completion*
