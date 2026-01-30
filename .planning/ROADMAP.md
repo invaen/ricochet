@@ -62,11 +62,11 @@ Plans:
   2. DNS queries to correlation subdomains are captured and logged
   3. User can configure Interactsh as callback target instead of local server
   4. Interactsh callbacks are correlated with injections
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: DNS callback server implementation
-- [ ] 03-02: Interactsh client integration
+- [ ] 03-01-PLAN.md — DNS callback server with socketserver.UDPServer and correlation subdomain extraction
+- [ ] 03-02-PLAN.md — Interactsh client for external callback URL generation
 
 ### Phase 4: Injection Engine
 **Goal**: Users can inject payloads into targets via CLI arguments or Burp request files
