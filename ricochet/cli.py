@@ -186,6 +186,13 @@ def create_parser() -> argparse.ArgumentParser:
         help='Show what would be injected without sending requests'
     )
 
+    # Proxy
+    inject_parser.add_argument(
+        '--proxy',
+        metavar='URL',
+        help='HTTP proxy URL (e.g., http://127.0.0.1:8080)'
+    )
+
     inject_parser.set_defaults(func=cmd_inject)
 
     # Crawl command - web crawler for injection point discovery
@@ -480,6 +487,12 @@ def _cmd_inject_from_crawl(args, store) -> int:
         print("=== DRY RUN MODE ===")
         print()
 
+    # When using proxy, inform user
+    if args.proxy:
+        print(f"[*] Using proxy: {args.proxy}")
+        print("[*] SSL verification disabled for proxy compatibility")
+        print()
+
     # Create rate limiter
     rate_limiter = RateLimiter(rate=args.rate, burst=1)
 
@@ -560,6 +573,7 @@ def _cmd_inject_from_crawl(args, store) -> int:
                     body=body,
                     timeout=args.timeout,
                     verify_ssl=False,
+                    proxy_url=args.proxy,
                 )
                 print(f"[+] {cv.location}:{cv.param_name}")
                 print(f"    Correlation ID: {correlation_id}")
@@ -662,11 +676,19 @@ def cmd_inject(args, store) -> int:
 
     # Create rate limiter and injector
     rate_limiter = RateLimiter(rate=args.rate, burst=1)
+
+    # When using proxy, inform user
+    if args.proxy:
+        print(f"[*] Using proxy: {args.proxy}")
+        print("[*] SSL verification disabled for proxy compatibility")
+        print()
+
     injector = Injector(
         store=store,
         rate_limiter=rate_limiter,
         timeout=args.timeout,
         callback_url=args.callback_url,
+        proxy_url=args.proxy,
     )
 
     # Get vectors

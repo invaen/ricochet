@@ -84,6 +84,7 @@ class Injector:
         rate_limiter: Optional[RateLimiter] = None,
         timeout: float = 10.0,
         callback_url: str = "http://localhost:8080",
+        proxy_url: Optional[str] = None,
     ) -> None:
         """Initialize the injector.
 
@@ -92,11 +93,13 @@ class Injector:
             rate_limiter: Optional rate limiter (default: 10 req/s, burst 1)
             timeout: Request timeout in seconds (default: 10.0)
             callback_url: Base URL for callback server (default: http://localhost:8080)
+            proxy_url: Optional HTTP proxy URL (e.g., http://127.0.0.1:8080)
         """
         self.store = store
         self.rate_limiter = rate_limiter or RateLimiter(rate=10, burst=1)
         self.timeout = timeout
         self.callback_url = callback_url
+        self.proxy_url = proxy_url
 
     def inject_vector(
         self,
@@ -163,6 +166,7 @@ class Injector:
                 timeout=self.timeout,
                 verify_ssl=False,  # Common for security testing
                 follow_redirects=True,
+                proxy_url=self.proxy_url,
             )
             return InjectionResult(
                 correlation_id=correlation_id,
