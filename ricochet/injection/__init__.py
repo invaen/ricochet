@@ -14,6 +14,7 @@ from ricochet.injection.parser import (
     parse_request_file,
     parse_request_string,
 )
+from ricochet.injection.payloads import load_payloads, load_payloads_streaming
 from ricochet.injection.rate_limiter import RateLimiter
 from ricochet.injection.vectors import InjectionVector, extract_vectors
 
@@ -27,6 +28,8 @@ __all__ = [
     "build_url",
     "extract_vectors",
     "inject_into_path",
+    "load_payloads",
+    "load_payloads_streaming",
     "parse_request_file",
     "parse_request_string",
     "prepare_headers_for_body",

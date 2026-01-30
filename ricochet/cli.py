@@ -137,6 +137,11 @@ def create_parser() -> argparse.ArgumentParser:
         default='{{CALLBACK}}',
         help='Payload template with {{CALLBACK}} placeholder (default: {{CALLBACK}})'
     )
+    inject_parser.add_argument(
+        '--payloads',
+        type=Path,
+        help='File containing payloads (one per line, # for comments)'
+    )
 
     # Callback configuration
     inject_parser.add_argument(
@@ -366,35 +371,72 @@ def cmd_inject(args, store) -> int:
         print("Warning: No injectable vectors found in request", file=sys.stderr)
         return 0
 
+    # Load payloads from file or use single payload
+    if args.payloads:
+        if not args.payloads.exists():
+            print(f"Error: Payloads file not found: {args.payloads}", file=sys.stderr)
+            return 2
+
+        try:
+            from ricochet.injection.payloads import load_payloads
+            payloads = load_payloads(args.payloads)
+        except UnicodeDecodeError as e:
+            print(f"Error: Failed to read payloads file (invalid UTF-8): {e}", file=sys.stderr)
+            return 2
+
+        if not payloads:
+            print("Warning: No payloads found in file (empty or all comments)", file=sys.stderr)
+            return 0
+
+        print(f"Loaded {len(payloads)} payload(s) from {args.payloads}")
+        print()
+    else:
+        payloads = [args.payload]
+
     if args.dry_run:
         print("=== DRY RUN MODE ===")
         print()
 
-    # Inject
+    # Inject all payloads
+    all_results = []
+
     if args.param:
-        # Inject specific parameter
-        result = injector.inject_single_param(
-            request=request,
-            param_name=args.param,
-            payload=args.payload,
-            use_https=use_https,
-            dry_run=args.dry_run,
-        )
-        if result is None:
+        # Find matching vector once
+        matching_vector = None
+        for v in vectors:
+            if v.name == args.param:
+                matching_vector = v
+                break
+
+        if matching_vector is None:
             print(f"Error: Parameter '{args.param}' not found in request", file=sys.stderr)
             print(f"Available parameters:", file=sys.stderr)
             for v in vectors:
                 print(f"  - {v.location}:{v.name}", file=sys.stderr)
             return 2
-        results = [result]
+
+        # Inject each payload into the specific parameter
+        for payload in payloads:
+            result = injector.inject_vector(
+                request=request,
+                vector=matching_vector,
+                payload=payload,
+                use_https=use_https,
+                dry_run=args.dry_run,
+            )
+            all_results.append(result)
     else:
-        # Inject all vectors
-        results = injector.inject_all_vectors(
-            request=request,
-            payload=args.payload,
-            use_https=use_https,
-            dry_run=args.dry_run,
-        )
+        # Inject each payload into all vectors
+        for payload in payloads:
+            results = injector.inject_all_vectors(
+                request=request,
+                payload=payload,
+                use_https=use_https,
+                dry_run=args.dry_run,
+            )
+            all_results.extend(results)
+
+    results = all_results
 
     # Display results
     successful = 0
