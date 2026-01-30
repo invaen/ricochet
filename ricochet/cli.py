@@ -1,11 +1,13 @@
 """CLI entry point and argument parser for Ricochet."""
 
 import argparse
+import secrets
 import sys
+import time
 from pathlib import Path
 
 from ricochet import __version__
-from ricochet.core.store import InjectionStore, get_db_path
+from ricochet.core.store import InjectionRecord, InjectionStore, get_db_path
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -66,6 +68,17 @@ def create_parser() -> argparse.ArgumentParser:
         default=8080,
         help='Port to listen on (default: 8080)'
     )
+    listen_parser.add_argument(
+        '--dns',
+        action='store_true',
+        help='Start DNS callback server'
+    )
+    listen_parser.add_argument(
+        '--dns-port',
+        type=int,
+        default=5353,
+        help='DNS port (default: 5353)'
+    )
     listen_parser.set_defaults(func=cmd_listen)
 
     return parser
@@ -84,9 +97,13 @@ def cmd_listen(args, store) -> int:
     if args.http:
         from ricochet.server.http import run_callback_server
         return run_callback_server(args.host, args.port, store)
+    elif args.dns:
+        from ricochet.server.dns import run_dns_server
+        return run_dns_server(args.host, args.dns_port, store)
     else:
-        print("Error: specify --http to start HTTP callback server", file=sys.stderr)
+        print("Error: specify --http or --dns to start callback server", file=sys.stderr)
         print("  Example: ricochet listen --http", file=sys.stderr)
+        print("  Example: ricochet listen --dns", file=sys.stderr)
         return 2
 
 
