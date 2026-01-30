@@ -286,6 +286,63 @@ def create_parser() -> argparse.ArgumentParser:
     )
     findings_parser.set_defaults(func=cmd_findings)
 
+    # Active command - probe endpoints to trigger stored payloads
+    active_parser = subparsers.add_parser(
+        'active',
+        help='Probe common endpoints to trigger second-order execution (active mode)'
+    )
+    active_parser.add_argument(
+        '-u', '--url',
+        required=True,
+        help='Base URL to probe (e.g., https://target.com)'
+    )
+    active_parser.add_argument(
+        '--endpoints',
+        type=Path,
+        metavar='FILE',
+        help='Path to file with custom endpoints (one per line)'
+    )
+    active_parser.add_argument(
+        '--rate',
+        type=float,
+        default=2.0,
+        help='Requests per second (default: 2.0, slower for admin panels)'
+    )
+    active_parser.add_argument(
+        '--timeout',
+        type=float,
+        default=10.0,
+        help='Request timeout in seconds (default: 10.0)'
+    )
+    active_parser.add_argument(
+        '--proxy',
+        metavar='URL',
+        help='HTTP proxy URL (e.g., http://127.0.0.1:8080)'
+    )
+    active_parser.set_defaults(func=cmd_active)
+
+    # Suggest command - show likely trigger points for injections
+    suggest_parser = subparsers.add_parser(
+        'suggest',
+        help='Show likely trigger points for injections'
+    )
+    suggest_parser.add_argument(
+        '--correlation-id',
+        help='Show suggestions for specific injection by correlation ID'
+    )
+    suggest_parser.add_argument(
+        '--param',
+        help='Show suggestions for a parameter name'
+    )
+    suggest_parser.add_argument(
+        '--recent',
+        type=int,
+        default=10,
+        metavar='N',
+        help='Show suggestions for N most recent injections (default: 10)'
+    )
+    suggest_parser.set_defaults(func=cmd_suggest)
+
     return parser
 
 
@@ -504,6 +561,123 @@ def cmd_findings(args, store) -> int:
     else:
         output_text(findings, verbose=verbose)
 
+    return 0
+
+
+def cmd_active(args, store) -> int:
+    """Handle active subcommand - probe endpoints to trigger stored payloads.
+
+    Args:
+        args: Parsed command line arguments.
+        store: InjectionStore instance (not used but passed for consistency).
+
+    Returns:
+        Exit code (0 for success, 1 for errors, 2 for argument errors).
+    """
+    from ricochet.triggers.active import ActiveTrigger, TRIGGER_ENDPOINTS
+
+    # Load custom endpoints if provided
+    endpoints = None
+    if args.endpoints:
+        if not args.endpoints.exists():
+            print(f"Error: Endpoints file not found: {args.endpoints}", file=sys.stderr)
+            return 2
+
+        try:
+            with open(args.endpoints) as f:
+                endpoints = [
+                    line.strip()
+                    for line in f
+                    if line.strip() and not line.strip().startswith('#')
+                ]
+        except IOError as e:
+            print(f"Error: Failed to read endpoints file: {e}", file=sys.stderr)
+            return 2
+
+        if not endpoints:
+            print("Warning: No endpoints found in file", file=sys.stderr)
+            return 0
+
+        print(f"Loaded {len(endpoints)} custom endpoint(s) from {args.endpoints}")
+    else:
+        endpoints = TRIGGER_ENDPOINTS
+        print(f"Using {len(endpoints)} default trigger endpoint(s)")
+
+    print(f"Probing {args.url}")
+    print(f"  Rate: {args.rate} req/s")
+    print(f"  Timeout: {args.timeout}s")
+    if args.proxy:
+        print(f"  Proxy: {args.proxy}")
+    print()
+
+    # Create trigger prober
+    trigger = ActiveTrigger(
+        base_url=args.url,
+        rate_limit=args.rate,
+        timeout=args.timeout,
+        proxy_url=args.proxy,
+    )
+
+    # Track results
+    successful_2xx = 0
+    successful_other = 0
+    failed = 0
+
+    def progress_callback(result):
+        """Print result as it completes."""
+        nonlocal successful_2xx, successful_other, failed
+
+        if result.error:
+            icon = "[!]"
+            status = result.error
+            failed += 1
+        elif 200 <= result.status < 300:
+            icon = "[+]"
+            status = f"{result.status}, {result.response_size} bytes"
+            successful_2xx += 1
+        elif result.status == 404:
+            icon = "[-]"
+            status = f"{result.status}"
+            successful_other += 1
+        else:
+            icon = "[*]"
+            status = f"{result.status}, {result.response_size} bytes"
+            successful_other += 1
+
+        print(f"{icon} {result.endpoint} ({status})")
+
+    # Probe all endpoints
+    results = trigger.probe_all(endpoints=endpoints, callback=progress_callback)
+
+    # Summary
+    print()
+    print("=== Summary ===")
+    print(f"Endpoints probed: {len(results)}")
+    print(f"Accessible (2xx): {successful_2xx}")
+    print(f"Other responses: {successful_other}")
+    print(f"Failed: {failed}")
+
+    if successful_2xx > 0:
+        print()
+        print("Accessible endpoints may have rendered stored payloads.")
+        print("Check callback server for any received interactions.")
+
+    return 0
+
+
+def cmd_suggest(args, store) -> int:
+    """Handle suggest subcommand - show likely trigger points.
+
+    Args:
+        args: Parsed command line arguments.
+        store: InjectionStore instance.
+
+    Returns:
+        Exit code (0 for success).
+    """
+    # Placeholder - will be implemented by 08-03-PLAN.md
+    print("Note: suggest command not yet implemented", file=sys.stderr)
+    print("This will show likely trigger points based on injection context.", file=sys.stderr)
     return 0
 
 
@@ -879,6 +1053,166 @@ def cmd_inject(args, store) -> int:
         print("Note: No requests were sent (dry-run mode)")
 
     return 0 if failed == 0 else 1
+
+
+def cmd_active(args, store) -> int:
+    """Handle active subcommand - probe endpoints to trigger stored payloads.
+
+    Args:
+        args: Parsed command line arguments.
+        store: InjectionStore instance.
+
+    Returns:
+        Exit code (0 for success, 1 for errors).
+    """
+    from ricochet.triggers.active import ActiveTrigger, TRIGGER_ENDPOINTS
+
+    trigger = ActiveTrigger(
+        base_url=args.url,
+        rate_limit=args.rate,
+        timeout=args.timeout,
+        proxy_url=args.proxy,
+    )
+
+    # Load custom endpoints if provided
+    endpoints = list(TRIGGER_ENDPOINTS)
+    if args.endpoints:
+        if not args.endpoints.exists():
+            print(f"Error: Endpoints file not found: {args.endpoints}", file=sys.stderr)
+            return 2
+
+        with open(args.endpoints) as f:
+            custom = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+            endpoints.extend(custom)
+
+    print(f"Probing {len(endpoints)} endpoint(s) at {args.url}")
+    print(f"  Rate: {args.rate} req/s")
+    print()
+
+    results = trigger.probe_all(endpoints)
+
+    # Display results
+    found = 0
+    for result in results:
+        status = f"HTTP {result.status_code}" if result.status_code else result.error
+        icon = "[+]" if result.accessible else "[-]"
+        print(f"{icon} {result.endpoint} -> {status}")
+        if result.accessible:
+            found += 1
+
+    print()
+    print(f"=== Summary ===")
+    print(f"Endpoints probed: {len(results)}")
+    print(f"Accessible: {found}")
+    print()
+    print("Monitor for callbacks with: ricochet findings --since 1")
+
+    return 0
+
+
+def cmd_suggest(args, store) -> int:
+    """Handle suggest subcommand - show likely trigger points for injections.
+
+    Args:
+        args: Parsed command line arguments.
+        store: InjectionStore instance.
+
+    Returns:
+        Exit code (0 for success, 2 for argument errors).
+    """
+    from ricochet.triggers.suggestions import TriggerSuggester
+
+    suggester = TriggerSuggester()
+
+    # Handle --param mode
+    if args.param:
+        suggestions = suggester.get_suggestions(args.param)
+
+        if not suggestions:
+            print(f"No suggestions for parameter: {args.param}")
+            return 0
+
+        print(f"=== Trigger Suggestions ===")
+        print()
+        print(f"Parameter: {args.param}")
+        print()
+
+        for sug in suggestions:
+            print(f"[{sug.likelihood.upper()}] {sug.location}")
+            print(f"  {sug.description}")
+            print(f"  Steps:")
+            for i, step in enumerate(sug.manual_steps, 1):
+                print(f"    {i}. {step}")
+            print()
+
+        return 0
+
+    # Handle --correlation-id mode
+    if args.correlation_id:
+        injection = store.get_injection(args.correlation_id)
+        if injection is None:
+            print(f"Error: Injection not found: {args.correlation_id}", file=sys.stderr)
+            return 2
+
+        suggestions = suggester.get_suggestions_for_injection(injection)
+
+        print(f"=== Trigger Suggestions ===")
+        print()
+        print(f"Injection: {args.correlation_id}")
+        print(f"Parameter: {injection.parameter}")
+        print(f"Target: {injection.target_url}")
+        print()
+
+        if not suggestions:
+            print("No suggestions available for this parameter.")
+            return 0
+
+        for sug in suggestions:
+            print(f"[{sug.likelihood.upper()}] {sug.location}")
+            print(f"  {sug.description}")
+            print(f"  Steps:")
+            for i, step in enumerate(sug.manual_steps, 1):
+                print(f"    {i}. {step}")
+            print()
+
+        return 0
+
+    # Default: show suggestions for recent injections
+    injections = store.list_injections(limit=args.recent)
+
+    if not injections:
+        print("No injections found. Run 'ricochet inject' first.")
+        return 0
+
+    print(f"=== Trigger Suggestions ===")
+    print(f"(Showing suggestions for {len(injections)} most recent injection(s))")
+    print()
+
+    for injection in injections:
+        suggestions = suggester.get_suggestions_for_injection(injection)
+
+        print(f"Injection: {injection.id}")
+        print(f"Parameter: {injection.parameter}")
+        print(f"Target: {injection.target_url}")
+        print()
+
+        if not suggestions:
+            print("  No suggestions available for this parameter.")
+            print()
+            continue
+
+        for sug in suggestions:
+            print(f"[{sug.likelihood.upper()}] {sug.location}")
+            print(f"  {sug.description}")
+            print(f"  Steps:")
+            for i, step in enumerate(sug.manual_steps, 1):
+                print(f"    {i}. {step}")
+            print()
+
+        print("-" * 40)
+        print()
+
+    return 0
 
 
 def main() -> int:
