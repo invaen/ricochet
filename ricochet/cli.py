@@ -310,6 +310,12 @@ def create_parser() -> argparse.ArgumentParser:
         help='Use vectors from crawl export JSON file'
     )
 
+    # Parameter specification (optional with -u, ignored with -r)
+    passive_parser.add_argument(
+        '-p', '--param',
+        help='Specific parameter to inject (with -u)'
+    )
+
     # Payload options
     passive_parser.add_argument(
         '--payload',
