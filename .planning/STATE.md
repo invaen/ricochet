@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 8 of 8 (Triggers & Reporting)
-Plan: 2 of 5 in current phase
+Plan: 3 of 5 in current phase
 Status: In progress
-Last activity: 2026-01-30 - Completed 08-02-PLAN.md (active trigger probing)
+Last activity: 2026-01-30 - Completed 08-03-PLAN.md (trigger suggestions)
 
-Progress: [█████████████████████████████░] 92%
+Progress: [██████████████████████████████] 94%
 
 ## Performance Metrics
 
@@ -97,6 +97,9 @@ Recent decisions affecting current work:
 - [07-02]: Severity icons: [!]=high, [+]=medium, [*]=low, [-]=info
 - [07-02]: Logs to stderr, findings to stdout for stream separation
 - [08-02]: Default rate 2.0 req/s for active probing (slower for admin panels)
+- [08-03]: Fuzzy parameter matching via substring normalization
+- [08-03]: 10 parameter patterns in TRIGGER_MAP (name, comment, message, etc.)
+- [08-03]: Deduplication by location in suggestions
 
 ### Pending Todos
 
@@ -109,5 +112,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Completed 08-02-PLAN.md
+Stopped at: Completed 08-03-PLAN.md
 Resume file: None
