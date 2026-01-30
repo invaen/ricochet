@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 6 of 8 (Vulnerability Payloads)
-Plan: 1 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: In progress
-Last activity: 2026-01-30 - Completed 06-01-PLAN.md (XSS Payload Generator)
+Last activity: 2026-01-30 - Completed 06-03-PLAN.md (SSTI Payload Generator)
 
-Progress: [█████████████████████░░░░░░░░░] 65.0%
+Progress: [████████████████████████░░░░░░] 75.0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
+- Total plans completed: 15
 - Average duration: 2.3 min
-- Total execution time: 31 min
+- Total execution time: 35 min
 
 **By Phase:**
 
@@ -32,10 +32,10 @@ Progress: [█████████████████████░░
 | 3 | 2/2 | 4 min | 2.0 min |
 | 4 | 3/3 | 12 min | 4.0 min |
 | 5 | 2/2 | 4 min | 2.0 min |
-| 6 | 1/4 | 2 min | 2.0 min |
+| 6 | 3/4 | 6 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 5, 3, 2, 2, 2 min
+- Last 5 plans: 3, 2, 2, 2, 2 min
 - Trend: Consistent 2 min for straightforward payload generators
 
 *Updated after each plan completion*
@@ -83,6 +83,8 @@ Recent decisions affecting current work:
 - [05-02]: Empty payload files return 0 with warning (not error)
 - [06-01]: Context hint 'html' returned with all XSS payloads
 - [06-01]: Generator yields raw payloads with {{CALLBACK}} placeholder (substitution in Injector)
+- [06-03]: Engine parameter for targeted vs broad SSTI testing
+- [06-03]: curl/nslookup command pairs for HTTP and DNS callbacks
 
 ### Pending Todos
 
@@ -95,5 +97,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Completed 06-01-PLAN.md (XSS Payload Generator)
+Stopped at: Completed 06-03-PLAN.md (SSTI Payload Generator)
 Resume file: None
