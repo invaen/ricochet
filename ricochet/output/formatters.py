@@ -56,6 +56,10 @@ def output_json(
                         else finding.callback_body.encode()
                     ).decode('ascii')
 
+        # Include structured metadata if present (from XSS exfil payloads)
+        if finding.has_metadata:
+            record["finding"]["callback"]["metadata"] = finding.metadata
+
         print(json.dumps(record), file=file)
 
 
@@ -103,5 +107,21 @@ def output_text(
             print(f"    Callback path: {f.request_path}", file=file)
             if f.callback_headers:
                 print(f"    Callback headers: {f.callback_headers}", file=file)
+
+            # Display captured metadata from XSS exfil payloads
+            if f.has_metadata:
+                meta = f.metadata
+                print(file=file)
+                print(f"    === Captured Metadata ===", file=file)
+                if meta.get('url'):
+                    print(f"    Victim URL: {meta['url']}", file=file)
+                if meta.get('cookies'):
+                    cookies = meta['cookies']
+                    print(f"    Cookies: {cookies[:100]}{'...' if len(cookies) > 100 else ''}", file=file)
+                if meta.get('ua'):
+                    print(f"    User-Agent: {meta['ua']}", file=file)
+                if meta.get('dom'):
+                    dom_preview = meta['dom'][:200].replace('\n', ' ')
+                    print(f"    DOM: {dom_preview}...", file=file)
 
         print(file=file)
