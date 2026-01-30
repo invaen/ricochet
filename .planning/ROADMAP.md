@@ -47,11 +47,11 @@ Plans:
   2. Each injection gets a unique correlation ID in the callback URL
   3. When callback fires, tool logs which correlation ID was triggered
   4. User can query which injections have received callbacks
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: Correlation ID generation and storage
-- [ ] 02-02: HTTP callback server implementation
+- [ ] 02-01-PLAN.md — HTTP callback server with ThreadingHTTPServer and correlation ID extraction
+- [ ] 02-02-PLAN.md — CLI listen subcommand wiring and end-to-end verification
 
 ### Phase 3: DNS & External Callbacks
 **Goal**: Users can detect callbacks through DNS (bypasses firewalls) and use Interactsh for real-world testing
@@ -162,7 +162,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-01-30 |
-| 2. HTTP Callback Server | 0/2 | Not started | - |
+| 2. HTTP Callback Server | 0/2 | Planning complete | - |
 | 3. DNS & External Callbacks | 0/2 | Not started | - |
 | 4. Injection Engine | 0/3 | Not started | - |
 | 5. Crawler & Payloads | 0/2 | Not started | - |
