@@ -237,6 +237,31 @@ def create_parser() -> argparse.ArgumentParser:
     )
     crawl_parser.set_defaults(func=cmd_crawl)
 
+    # Findings command - show correlated findings
+    findings_parser = subparsers.add_parser(
+        'findings',
+        help='Show correlated findings (injections that received callbacks)'
+    )
+    findings_parser.add_argument(
+        '-o', '--output',
+        choices=['json', 'text'],
+        default='text',
+        help='Output format (default: text)'
+    )
+    findings_parser.add_argument(
+        '--since',
+        metavar='HOURS',
+        type=float,
+        help='Only show findings from last N hours'
+    )
+    findings_parser.add_argument(
+        '--min-severity',
+        choices=['info', 'low', 'medium', 'high'],
+        default='info',
+        help='Minimum severity to show (default: info)'
+    )
+    findings_parser.set_defaults(func=cmd_findings)
+
     return parser
 
 
@@ -419,6 +444,41 @@ def cmd_crawl(args, store) -> int:
         print()
         print("Use with inject command:")
         print(f"  ricochet inject --from-crawl {args.export} --callback-url <url>")
+
+    return 0
+
+
+def cmd_findings(args, store) -> int:
+    """Handle findings subcommand - show correlated findings.
+
+    Args:
+        args: Parsed command line arguments.
+        store: InjectionStore instance.
+
+    Returns:
+        Exit code (0 for success).
+    """
+    from ricochet.output import output_json, output_text
+
+    # Calculate since timestamp if provided
+    since = None
+    if args.since:
+        since = time.time() - (args.since * 3600)  # hours to seconds
+
+    # Get findings from store
+    findings = store.get_findings(
+        since=since,
+        min_severity=args.min_severity
+    )
+
+    # Output in requested format
+    # Use args.verbose from global -v flag
+    verbose = getattr(args, 'verbose', 0) > 0
+
+    if args.output == 'json':
+        output_json(findings, verbose=verbose)
+    else:
+        output_text(findings, verbose=verbose)
 
     return 0
 
