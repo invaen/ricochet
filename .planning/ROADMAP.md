@@ -32,11 +32,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. User can run `ricochet --version` and see version info
   3. Tool creates SQLite database on first run without external dependencies
   4. Database persists injection records across sessions
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: CLI skeleton and argument parsing
-- [ ] 01-02: SQLite persistence layer for correlation data
+- [ ] 01-01-PLAN.md — CLI skeleton with argparse subcommand structure
+- [ ] 01-02-PLAN.md — SQLite persistence layer for injection/callback tracking
 
 ### Phase 2: HTTP Callback Server
 **Goal**: Users can run a local HTTP callback server and track which injections triggered callbacks
@@ -161,7 +161,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/2 | Not started | - |
+| 1. Foundation | 0/2 | Ready for execution | - |
 | 2. HTTP Callback Server | 0/2 | Not started | - |
 | 3. DNS & External Callbacks | 0/2 | Not started | - |
 | 4. Injection Engine | 0/3 | Not started | - |
