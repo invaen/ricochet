@@ -1,6 +1,7 @@
 """CLI entry point and argument parser for Ricochet."""
 
 import argparse
+import logging
 import secrets
 import sys
 import time
@@ -9,6 +10,29 @@ from typing import Optional
 
 from ricochet import __version__
 from ricochet.core.store import InjectionRecord, InjectionStore, get_db_path
+
+
+def setup_logging(verbosity: int) -> None:
+    """Configure logging based on verbosity level.
+
+    Args:
+        verbosity: Count from argparse (0=warning, 1=info, 2+=debug)
+    """
+    # Map verbosity to log level: 0->WARNING, 1->INFO, 2+->DEBUG
+    level = logging.WARNING - (verbosity * 10)
+    level = max(level, logging.DEBUG)  # Don't go below DEBUG
+
+    # Configure format based on level
+    if level <= logging.DEBUG:
+        fmt = '%(asctime)s %(levelname)s %(name)s: %(message)s'
+    else:
+        fmt = '%(levelname)s: %(message)s'
+
+    logging.basicConfig(
+        level=level,
+        format=fmt,
+        stream=sys.stderr,  # Logs to stderr, findings to stdout
+    )
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -866,6 +890,9 @@ def main() -> int:
     try:
         parser = create_parser()
         args = parser.parse_args()
+
+        # Set up logging based on verbosity
+        setup_logging(args.verbose)
 
         # Initialize database (creates on first run)
         db_path = args.db if args.db is not None else get_db_path()
