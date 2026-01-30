@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - CLI skeleton, SQLite persistence, zero-deps architecture
 - [x] **Phase 2: HTTP Callback Server** - Correlation IDs, built-in HTTP callback listener
 - [x] **Phase 3: DNS & External Callbacks** - DNS callback server, Interactsh integration
-- [ ] **Phase 4: Injection Engine** - HTTP client, request parsing, Burp format support
+- [x] **Phase 4: Injection Engine** - HTTP client, request parsing, Burp format support
 - [ ] **Phase 5: Crawler & Payloads** - Auto-discovery crawling, custom payload loading
 - [ ] **Phase 6: Vulnerability Payloads** - XSS, SQLi, SSTI payload generation with polyglots
 - [ ] **Phase 7: Correlation & Output** - Match callbacks to injections, JSON/text/verbose output
@@ -83,7 +83,7 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — HTTP client with timeout and rate limiting
 - [x] 04-02-PLAN.md — Burp request file parser and vector extraction
-- [ ] 04-03-PLAN.md — Multi-vector injection logic and CLI wiring
+- [x] 04-03-PLAN.md — Multi-vector injection logic and CLI wiring
 
 ### Phase 5: Crawler & Payloads
 **Goal**: Users can auto-discover injection points and use custom payload files
@@ -164,7 +164,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 1. Foundation | 2/2 | Complete | 2026-01-30 |
 | 2. HTTP Callback Server | 2/2 | Complete | 2026-01-30 |
 | 3. DNS & External Callbacks | 2/2 | Complete | 2026-01-30 |
-| 4. Injection Engine | 2/3 | In progress | - |
+| 4. Injection Engine | 3/3 | Complete | 2026-01-30 |
 | 5. Crawler & Payloads | 0/2 | Not started | - |
 | 6. Vulnerability Payloads | 0/4 | Not started | - |
 | 7. Correlation & Output | 0/3 | Not started | - |

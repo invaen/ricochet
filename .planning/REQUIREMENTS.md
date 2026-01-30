@@ -24,11 +24,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Injection Modes
 
-- [ ] **INJ-01**: Tool accepts HTTP request files (Burp format) as input
-- [ ] **INJ-02**: Tool accepts targeted URL + parameter specification via CLI
+- [x] **INJ-01**: Tool accepts HTTP request files (Burp format) as input
+- [x] **INJ-02**: Tool accepts targeted URL + parameter specification via CLI
 - [ ] **INJ-03**: Tool can crawl target to discover injection points automatically
 - [ ] **INJ-04**: Tool supports loading custom payloads from file
-- [ ] **INJ-05**: Tool injects payloads into all identified input vectors (params, headers, body)
+- [x] **INJ-05**: Tool injects payloads into all identified input vectors (params, headers, body)
 
 ### Trigger Mechanisms
 
@@ -49,8 +49,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CORE-01**: Tool is a CLI application with standard Unix conventions
 - [x] **CORE-02**: Tool has zero external dependencies (Python stdlib only)
 - [x] **CORE-03**: Tool persists injection state to SQLite for correlation across sessions
-- [ ] **CORE-04**: Tool supports configurable timeouts for requests and callback polling
-- [ ] **CORE-05**: Tool implements rate limiting to avoid bans
+- [x] **CORE-04**: Tool supports configurable timeouts for requests and callback polling
+- [x] **CORE-05**: Tool implements rate limiting to avoid bans
 
 ## v2 Requirements
 
@@ -97,11 +97,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | VULN-02 | Phase 6 | Pending |
 | VULN-03 | Phase 6 | Pending |
 | VULN-04 | Phase 6 | Pending |
-| INJ-01 | Phase 4 | Pending |
-| INJ-02 | Phase 4 | Pending |
+| INJ-01 | Phase 4 | Complete |
+| INJ-02 | Phase 4 | Complete |
 | INJ-03 | Phase 5 | Pending |
 | INJ-04 | Phase 5 | Pending |
-| INJ-05 | Phase 4 | Pending |
+| INJ-05 | Phase 4 | Complete |
 | TRIG-01 | Phase 8 | Pending |
 | TRIG-02 | Phase 8 | Pending |
 | TRIG-03 | Phase 8 | Pending |
@@ -113,8 +113,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CORE-01 | Phase 1 | Complete |
 | CORE-02 | Phase 1 | Complete |
 | CORE-03 | Phase 1 | Complete |
-| CORE-04 | Phase 4 | Pending |
-| CORE-05 | Phase 4 | Pending |
+| CORE-04 | Phase 4 | Complete |
+| CORE-05 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 27 total
@@ -123,4 +123,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-30 after Phase 3 completion*
+*Last updated: 2026-01-30 after Phase 4 completion*
