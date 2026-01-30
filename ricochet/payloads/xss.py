@@ -45,3 +45,21 @@ class XSSPayloadGenerator:
         builtin_path = Path(__file__).parent / "builtin" / "xss-callback.txt"
         for payload in load_payloads(builtin_path):
             yield (payload, "html")
+
+    def generate_exfil(self, callback_url: str) -> Iterator[tuple[str, str]]:
+        """Generate XSS payloads that exfiltrate metadata.
+
+        These payloads capture DOM, cookies, URL, and user-agent when executed,
+        sending the data as JSON via POST for rich bug bounty reporting.
+
+        Args:
+            callback_url: Base callback URL (placeholder substitution in Injector)
+
+        Yields:
+            Tuples of (payload, context) where:
+            - payload: XSS exfiltration payload with {{CALLBACK}} placeholder
+            - context: "html:exfil" indicating metadata-capturing payload
+        """
+        builtin_path = Path(__file__).parent / "builtin" / "xss-exfil.txt"
+        for payload in load_payloads(builtin_path):
+            yield (payload, "html:exfil")

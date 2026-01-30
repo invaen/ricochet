@@ -1,5 +1,6 @@
 """Finding dataclass for correlated injection-callback pairs."""
 
+import json
 from dataclasses import dataclass
 from typing import Optional
 
@@ -43,3 +44,26 @@ class Finding:
         if 'xss' in ctx_lower:
             return 'medium'
         return 'info'
+
+    @property
+    def metadata(self) -> dict | None:
+        """Extract metadata from callback body if present.
+
+        XSS exfiltration payloads send JSON with captured data.
+        Returns dict with url, cookies, dom, ua (user-agent), etc.
+        Returns None if body is not valid JSON or not present.
+        """
+        if not self.callback_body:
+            return None
+        try:
+            data = json.loads(self.callback_body.decode('utf-8'))
+            if isinstance(data, dict):
+                return data
+        except (json.JSONDecodeError, UnicodeDecodeError, AttributeError):
+            pass
+        return None
+
+    @property
+    def has_metadata(self) -> bool:
+        """Check if finding has valid JSON metadata from callback."""
+        return self.metadata is not None
