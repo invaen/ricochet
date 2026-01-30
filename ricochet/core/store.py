@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
+from ricochet.output.finding import Finding
+
 
 def get_db_path() -> Path:
     """Get the default database path, creating parent directory if needed.
@@ -279,3 +281,72 @@ class InjectionStore:
             )
             for row in rows
         ]
+
+    def get_findings(
+        self,
+        since: Optional[float] = None,
+        min_severity: str = 'info'
+    ) -> list[Finding]:
+        """Get correlated findings (injections with callbacks).
+
+        Args:
+            since: Only return findings with callbacks after this timestamp.
+            min_severity: Minimum severity level ('info', 'low', 'medium', 'high').
+
+        Returns:
+            List of Finding objects ordered by callback time (newest first).
+        """
+        severity_order = {'info': 0, 'low': 1, 'medium': 2, 'high': 3}
+        min_level = severity_order.get(min_severity, 0)
+
+        query = """
+            SELECT
+                i.id as correlation_id,
+                i.target_url,
+                i.parameter,
+                i.payload,
+                i.context,
+                i.injected_at,
+                c.id as callback_id,
+                c.source_ip,
+                c.request_path,
+                c.headers as callback_headers,
+                c.body as callback_body,
+                c.received_at,
+                (c.received_at - i.injected_at) as delay_seconds
+            FROM injections i
+            INNER JOIN callbacks c ON i.id = c.correlation_id
+        """
+
+        params: list = []
+        if since is not None:
+            query += " WHERE c.received_at > ?"
+            params.append(since)
+
+        query += " ORDER BY c.received_at DESC"
+
+        with self._get_connection() as conn:
+            rows = conn.execute(query, params).fetchall()
+
+        findings = []
+        for row in rows:
+            finding = Finding(
+                correlation_id=row['correlation_id'],
+                target_url=row['target_url'],
+                parameter=row['parameter'],
+                payload=row['payload'],
+                context=row['context'],
+                injected_at=row['injected_at'],
+                callback_id=row['callback_id'],
+                source_ip=row['source_ip'],
+                request_path=row['request_path'],
+                callback_headers=json.loads(row['callback_headers']) if row['callback_headers'] else {},
+                callback_body=row['callback_body'].encode() if isinstance(row['callback_body'], str) else row['callback_body'],
+                received_at=row['received_at'],
+                delay_seconds=row['delay_seconds']
+            )
+            # Filter by min_severity after creating (severity is derived)
+            if severity_order.get(finding.severity, 0) >= min_level:
+                findings.append(finding)
+
+        return findings
