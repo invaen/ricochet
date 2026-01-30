@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-29)
 
 **Core value:** Detect vulnerabilities that execute in a different context than where they were injected
-**Current focus:** Phase 3 - DNS & External Callbacks
+**Current focus:** Phase 4 - Payload Generation (next)
 
 ## Current Position
 
 Phase: 3 of 8 (DNS & External Callbacks)
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-01-30 - Completed 03-01-PLAN.md
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-01-30 - Completed 03-02-PLAN.md
 
-Progress: [=====               ] 23%
+Progress: [======              ] 27%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
+- Total plans completed: 6
 - Average duration: 2.2 min
-- Total execution time: 11 min
+- Total execution time: 13 min
 
 **By Phase:**
 
@@ -29,10 +29,10 @@ Progress: [=====               ] 23%
 |-------|-------|-------|----------|
 | 1 | 2/2 | 5 min | 2.5 min |
 | 2 | 2/2 | 4 min | 2.0 min |
-| 3 | 1/2 | 2 min | 2.0 min |
+| 3 | 2/2 | 4 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 3, 2, 2, 2 min
+- Last 5 plans: 2, 2, 2, 2 min
 - Trend: Consistent ~2 min/plan
 
 *Updated after each plan completion*
@@ -58,6 +58,8 @@ Recent decisions affecting current work:
 - [03-01]: Extract correlation ID from first subdomain label for DNS callbacks
 - [03-01]: Always respond with 127.0.0.1 for A queries (prevents enumeration)
 - [03-01]: Default DNS port 5353 (high port, no root required)
+- [03-02]: No RSA+AES encryption - Interactsh public servers unsupported, self-hosted only
+- [03-02]: Placeholder injection records for tracking external callback URLs
 
 ### Pending Todos
 
@@ -70,5 +72,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Completed 03-01-PLAN.md
+Stopped at: Completed 03-02-PLAN.md (Phase 3 complete)
 Resume file: None
