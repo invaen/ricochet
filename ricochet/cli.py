@@ -831,22 +831,6 @@ def cmd_active(args, store) -> int:
     return 0
 
 
-def cmd_suggest(args, store) -> int:
-    """Handle suggest subcommand - show likely trigger points.
-
-    Args:
-        args: Parsed command line arguments.
-        store: InjectionStore instance.
-
-    Returns:
-        Exit code (0 for success).
-    """
-    # Placeholder - will be implemented by 08-03-PLAN.md
-    print("Note: suggest command not yet implemented", file=sys.stderr)
-    print("This will show likely trigger points based on injection context.", file=sys.stderr)
-    return 0
-
-
 def _cmd_inject_from_crawl(args, store) -> int:
     """Handle inject --from-crawl mode.
 
@@ -1219,61 +1203,6 @@ def cmd_inject(args, store) -> int:
         print("Note: No requests were sent (dry-run mode)")
 
     return 0 if failed == 0 else 1
-
-
-def cmd_active(args, store) -> int:
-    """Handle active subcommand - probe endpoints to trigger stored payloads.
-
-    Args:
-        args: Parsed command line arguments.
-        store: InjectionStore instance.
-
-    Returns:
-        Exit code (0 for success, 1 for errors).
-    """
-    from ricochet.triggers.active import ActiveTrigger, TRIGGER_ENDPOINTS
-
-    trigger = ActiveTrigger(
-        base_url=args.url,
-        rate_limit=args.rate,
-        timeout=args.timeout,
-        proxy_url=args.proxy,
-    )
-
-    # Load custom endpoints if provided
-    endpoints = list(TRIGGER_ENDPOINTS)
-    if args.endpoints:
-        if not args.endpoints.exists():
-            print(f"Error: Endpoints file not found: {args.endpoints}", file=sys.stderr)
-            return 2
-
-        with open(args.endpoints) as f:
-            custom = [line.strip() for line in f if line.strip() and not line.startswith('#')]
-            endpoints.extend(custom)
-
-    print(f"Probing {len(endpoints)} endpoint(s) at {args.url}")
-    print(f"  Rate: {args.rate} req/s")
-    print()
-
-    results = trigger.probe_all(endpoints)
-
-    # Display results
-    found = 0
-    for result in results:
-        status = f"HTTP {result.status_code}" if result.status_code else result.error
-        icon = "[+]" if result.accessible else "[-]"
-        print(f"{icon} {result.endpoint} -> {status}")
-        if result.accessible:
-            found += 1
-
-    print()
-    print(f"=== Summary ===")
-    print(f"Endpoints probed: {len(results)}")
-    print(f"Accessible: {found}")
-    print()
-    print("Monitor for callbacks with: ricochet findings --since 1")
-
-    return 0
 
 
 def cmd_suggest(args, store) -> int:
