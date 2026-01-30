@@ -5,7 +5,7 @@ import signal
 import socketserver
 import struct
 import threading
-from typing import TYPE_CHECKING
+from typing import Optional, Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ricochet.core.store import InjectionStore
@@ -81,7 +81,7 @@ class DNSHandler(socketserver.BaseRequestHandler):
         except Exception as e:
             logger.error("Error handling DNS query from %s: %s", client_ip, e)
 
-    def _parse_question(self, data: bytes, offset: int) -> tuple[str | None, int, int]:
+    def _parse_question(self, data: bytes, offset: int) -> tuple[Optional[str], int, int]:
         """Parse the question section to extract QNAME and QTYPE.
 
         Args:
@@ -129,7 +129,7 @@ class DNSHandler(socketserver.BaseRequestHandler):
 
         return qname, qtype, pos
 
-    def _extract_correlation_id(self, qname: str) -> str | None:
+    def _extract_correlation_id(self, qname: str) -> Optional[str]:
         """Extract correlation ID from the first subdomain label.
 
         The correlation ID is expected to be the first label of the domain name.
@@ -164,7 +164,7 @@ class DNSHandler(socketserver.BaseRequestHandler):
         self,
         txn_id: int,
         query: bytes,
-        qname: str | None,
+        qname: Optional[str],
         qtype: int
     ) -> bytes:
         """Build a DNS response packet.

@@ -4,7 +4,7 @@ import logging
 import signal
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 from urllib.parse import urlparse
 
 if TYPE_CHECKING:
@@ -22,7 +22,7 @@ class CallbackHandler(BaseHTTPRequestHandler):
         """Override to use logging module instead of stderr."""
         logger.debug("%s - %s", self.address_string(), format % args)
 
-    def _extract_correlation_id(self) -> str | None:
+    def _extract_correlation_id(self) -> Optional[str]:
         """Extract correlation ID from the URL path.
 
         The correlation ID is expected to be the last non-empty segment
@@ -48,7 +48,7 @@ class CallbackHandler(BaseHTTPRequestHandler):
 
         return candidate
 
-    def _handle_callback(self, body: bytes | None = None) -> None:
+    def _handle_callback(self, body: Optional[bytes] = None) -> None:
         """Process an incoming callback request.
 
         Extracts correlation ID, records the callback if ID is known,
@@ -95,7 +95,7 @@ class CallbackHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b'OK')
 
-    def _read_body(self) -> bytes | None:
+    def _read_body(self) -> Optional[bytes]:
         """Read request body based on Content-Length header."""
         content_length = self.headers.get('Content-Length')
         if content_length:

@@ -38,7 +38,7 @@ class CallbackRecord:
     source_ip: str
     request_path: str
     headers: dict
-    body: bytes | None
+    body: Optional[bytes]
     received_at: float
 
 
@@ -172,7 +172,7 @@ class InjectionStore:
         source_ip: str,
         request_path: str,
         headers: dict,
-        body: bytes | None
+        body: Optional[bytes]
     ) -> bool:
         """Store a callback record.
 

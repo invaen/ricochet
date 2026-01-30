@@ -25,7 +25,7 @@ import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ricochet.core.store import InjectionStore
@@ -54,7 +54,7 @@ class InteractshClient:
         self,
         server: str,
         correlation_id: str,
-        secret: str | None = None
+        secret: Optional[str] = None
     ):
         """Initialize Interactsh client.
 
@@ -95,7 +95,7 @@ class InteractshClient:
 
     def poll(
         self,
-        store: 'InjectionStore | None' = None
+        store: 'Optional[InjectionStore]' = None
     ) -> list[InteractshInteraction]:
         """Poll Interactsh server for interactions.
 
@@ -152,7 +152,7 @@ class InteractshClient:
 
 
 def create_interactsh_client(
-    store: 'InjectionStore | None' = None,
+    store: 'Optional[InjectionStore]' = None,
     server: str = "oast.pro"
 ) -> InteractshClient:
     """Create an Interactsh client with a new correlation ID.

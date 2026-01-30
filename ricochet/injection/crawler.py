@@ -151,7 +151,7 @@ class LinkFormExtractor(HTMLParser):
         self.result = ExtractedData()
         self._current_form: Optional[FormData] = None
 
-    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, Optional[str]]]) -> None:
         """Handle opening tags - extract links, forms, and inputs."""
         attrs_dict = {k: v for k, v in attrs if v is not None}
 
