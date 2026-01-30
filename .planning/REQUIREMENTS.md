@@ -10,8 +10,8 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Callback Infrastructure
 
 - [ ] **CALL-01**: Tool integrates with Interactsh for out-of-band callback detection
-- [ ] **CALL-02**: Tool generates unique correlation IDs linking injections to callbacks
-- [ ] **CALL-03**: Tool can run its own HTTP callback server for local testing
+- [x] **CALL-02**: Tool generates unique correlation IDs linking injections to callbacks
+- [x] **CALL-03**: Tool can run its own HTTP callback server for local testing
 - [ ] **CALL-04**: Tool can run its own DNS callback server for firewall-bypassing detection
 - [ ] **CALL-05**: When XSS fires, tool captures metadata (DOM snapshot, cookies, URL, user-agent)
 
@@ -89,8 +89,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | CALL-01 | Phase 3 | Pending |
-| CALL-02 | Phase 2 | Pending |
-| CALL-03 | Phase 2 | Pending |
+| CALL-02 | Phase 2 | Complete |
+| CALL-03 | Phase 2 | Complete |
 | CALL-04 | Phase 3 | Pending |
 | CALL-05 | Phase 8 | Pending |
 | VULN-01 | Phase 6 | Pending |
@@ -123,4 +123,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-29*
-*Last updated: 2026-01-29 after roadmap creation*
+*Last updated: 2026-01-30 after Phase 2 completion*
