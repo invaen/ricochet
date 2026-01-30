@@ -12,7 +12,7 @@ Ricochet progresses from foundational infrastructure through increasingly sophis
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - CLI skeleton, SQLite persistence, zero-deps architecture
+- [x] **Phase 1: Foundation** - CLI skeleton, SQLite persistence, zero-deps architecture
 - [ ] **Phase 2: HTTP Callback Server** - Correlation IDs, built-in HTTP callback listener
 - [ ] **Phase 3: DNS & External Callbacks** - DNS callback server, Interactsh integration
 - [ ] **Phase 4: Injection Engine** - HTTP client, request parsing, Burp format support
@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — CLI skeleton with argparse subcommand structure
-- [ ] 01-02-PLAN.md — SQLite persistence layer for injection/callback tracking
+- [x] 01-02-PLAN.md — SQLite persistence layer for injection/callback tracking
 
 ### Phase 2: HTTP Callback Server
 **Goal**: Users can run a local HTTP callback server and track which injections triggered callbacks
@@ -161,7 +161,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/2 | In progress | - |
+| 1. Foundation | 2/2 | Complete | 2026-01-30 |
 | 2. HTTP Callback Server | 0/2 | Not started | - |
 | 3. DNS & External Callbacks | 0/2 | Not started | - |
 | 4. Injection Engine | 0/3 | Not started | - |
