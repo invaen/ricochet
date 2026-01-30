@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: DNS & External Callbacks** - DNS callback server, Interactsh integration
 - [x] **Phase 4: Injection Engine** - HTTP client, request parsing, Burp format support
 - [x] **Phase 5: Crawler & Payloads** - Auto-discovery crawling, custom payload loading
-- [ ] **Phase 6: Vulnerability Payloads** - XSS, SQLi, SSTI payload generation with polyglots
+- [x] **Phase 6: Vulnerability Payloads** - XSS, SQLi, SSTI payload generation with polyglots
 - [ ] **Phase 7: Correlation & Output** - Match callbacks to injections, JSON/text/verbose output
 - [ ] **Phase 8: Triggers & Reporting** - Passive/active trigger modes, bug bounty reports
 
@@ -113,10 +113,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — XSS payload generator with callback embedding
-- [ ] 06-02-PLAN.md — SQLi OOB payload generator (MSSQL, MySQL, Oracle, PostgreSQL)
-- [ ] 06-03-PLAN.md — SSTI payload generator (Jinja2, Freemarker, Twig)
-- [ ] 06-04-PLAN.md — Polyglot payload generator and module consolidation
+- [x] 06-01-PLAN.md — XSS payload generator with callback embedding
+- [x] 06-02-PLAN.md — SQLi OOB payload generator (MSSQL, MySQL, Oracle, PostgreSQL)
+- [x] 06-03-PLAN.md — SSTI payload generator (Jinja2, Freemarker, Twig)
+- [x] 06-04-PLAN.md — Polyglot payload generator and module consolidation
 
 ### Phase 7: Correlation & Output
 **Goal**: Tool correlates callbacks with injections and outputs findings in multiple formats
@@ -128,12 +128,12 @@ Plans:
   3. User can get human-readable output with `-o text`
   4. User can enable verbose/debug mode to see payloads and responses
   5. User can route traffic through HTTP proxy with `--proxy`
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 07-01: Callback-injection correlation engine
-- [ ] 07-02: Output formatters (JSON, text, verbose)
-- [ ] 07-03: Proxy support integration
+- [ ] 07-01-PLAN.md — Callback-injection correlation engine with Finding dataclass
+- [ ] 07-02-PLAN.md — Output formatters (JSON, text) and findings CLI command
+- [ ] 07-03-PLAN.md — HTTP proxy support integration
 
 ### Phase 8: Triggers & Reporting
 **Goal**: Tool helps trigger payload execution and generates bug bounty reports
@@ -166,6 +166,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 3. DNS & External Callbacks | 2/2 | Complete | 2026-01-30 |
 | 4. Injection Engine | 3/3 | Complete | 2026-01-30 |
 | 5. Crawler & Payloads | 2/2 | Complete | 2026-01-30 |
-| 6. Vulnerability Payloads | 0/4 | Planned | - |
-| 7. Correlation & Output | 0/3 | Not started | - |
+| 6. Vulnerability Payloads | 4/4 | Complete | 2026-01-30 |
+| 7. Correlation & Output | 0/3 | Planned | - |
 | 8. Triggers & Reporting | 0/5 | Not started | - |
