@@ -1,5 +1,6 @@
 """SQLite persistence layer for injection tracking."""
 
+import json
 import sqlite3
 import time
 from dataclasses import dataclass
@@ -27,6 +28,18 @@ class InjectionRecord:
     payload: str
     timestamp: float
     context: Optional[str] = None
+
+
+@dataclass
+class CallbackRecord:
+    """Record of a received callback."""
+    id: int
+    correlation_id: str
+    source_ip: str
+    request_path: str
+    headers: dict
+    body: bytes | None
+    received_at: float
 
 
 class InjectionStore:
@@ -149,6 +162,120 @@ class InjectionStore:
                 payload=row['payload'],
                 timestamp=row['injected_at'],
                 context=row['context']
+            )
+            for row in rows
+        ]
+
+    def record_callback(
+        self,
+        correlation_id: str,
+        source_ip: str,
+        request_path: str,
+        headers: dict,
+        body: bytes | None
+    ) -> bool:
+        """Store a callback record.
+
+        Args:
+            correlation_id: The correlation ID from the callback URL.
+            source_ip: IP address of the callback source.
+            request_path: Full request path including query string.
+            headers: Request headers as a dictionary.
+            body: Request body bytes, or None.
+
+        Returns:
+            True if callback was recorded (correlation ID exists),
+            False if correlation ID is unknown.
+        """
+        with self._get_connection() as conn:
+            # Check if the injection exists (foreign key constraint)
+            exists = conn.execute(
+                "SELECT 1 FROM injections WHERE id = ?",
+                (correlation_id,)
+            ).fetchone()
+
+            if exists is None:
+                return False
+
+            conn.execute(
+                """
+                INSERT INTO callbacks
+                (correlation_id, source_ip, request_path, headers, body, received_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    correlation_id,
+                    source_ip,
+                    request_path,
+                    json.dumps(headers),
+                    body,
+                    time.time()
+                )
+            )
+            return True
+
+    def get_callbacks_for_injection(self, correlation_id: str) -> list[CallbackRecord]:
+        """Get all callbacks for a specific injection.
+
+        Args:
+            correlation_id: The correlation ID to query.
+
+        Returns:
+            List of CallbackRecords ordered by received_at (newest first).
+        """
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                """
+                SELECT * FROM callbacks
+                WHERE correlation_id = ?
+                ORDER BY received_at DESC
+                """,
+                (correlation_id,)
+            ).fetchall()
+
+        return [
+            CallbackRecord(
+                id=row['id'],
+                correlation_id=row['correlation_id'],
+                source_ip=row['source_ip'],
+                request_path=row['request_path'],
+                headers=json.loads(row['headers']) if row['headers'] else {},
+                body=row['body'].encode() if isinstance(row['body'], str) else row['body'],
+                received_at=row['received_at']
+            )
+            for row in rows
+        ]
+
+    def get_injections_with_callbacks(self) -> list[tuple[InjectionRecord, int]]:
+        """Get all injections that have received callbacks.
+
+        Returns:
+            List of tuples (InjectionRecord, callback_count) ordered by
+            most recent callback first.
+        """
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                """
+                SELECT i.*, COUNT(c.id) as callback_count,
+                       MAX(c.received_at) as last_callback
+                FROM injections i
+                JOIN callbacks c ON i.id = c.correlation_id
+                GROUP BY i.id
+                ORDER BY last_callback DESC
+                """
+            ).fetchall()
+
+        return [
+            (
+                InjectionRecord(
+                    id=row['id'],
+                    target_url=row['target_url'],
+                    parameter=row['parameter'],
+                    payload=row['payload'],
+                    timestamp=row['injected_at'],
+                    context=row['context']
+                ),
+                row['callback_count']
             )
             for row in rows
         ]
