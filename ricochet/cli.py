@@ -439,6 +439,34 @@ def create_parser() -> argparse.ArgumentParser:
     )
     suggest_parser.set_defaults(func=cmd_suggest)
 
+    # Report command - generate bug bounty reports
+    report_parser = subparsers.add_parser(
+        'report',
+        help='Generate bug bounty report from findings'
+    )
+    report_parser.add_argument(
+        '--correlation-id',
+        help='Generate report for specific finding by correlation ID'
+    )
+    report_parser.add_argument(
+        '-o', '--output',
+        type=Path,
+        metavar='FILE',
+        help='Write report to file (default: stdout)'
+    )
+    report_parser.add_argument(
+        '--format',
+        choices=['markdown'],
+        default='markdown',
+        help='Report format (default: markdown)'
+    )
+    report_parser.add_argument(
+        '--all',
+        action='store_true',
+        help='Generate reports for all findings (separate files)'
+    )
+    report_parser.set_defaults(func=cmd_report)
+
     return parser
 
 
@@ -1312,6 +1340,94 @@ def cmd_suggest(args, store) -> int:
 
         print("-" * 40)
         print()
+
+    return 0
+
+
+def cmd_report(args, store) -> int:
+    """Handle report subcommand - generate bug bounty reports.
+
+    Args:
+        args: Parsed command line arguments.
+        store: InjectionStore instance.
+
+    Returns:
+        Exit code (0 for success, 2 for argument errors).
+    """
+    from ricochet.reporting import generate_report
+
+    # Validate arguments
+    if args.all and args.correlation_id:
+        print("Error: Cannot use --all with --correlation-id", file=sys.stderr)
+        return 2
+
+    if not args.all and not args.correlation_id:
+        print("Error: Specify --correlation-id or --all", file=sys.stderr)
+        print("  Example: ricochet report --correlation-id abc123", file=sys.stderr)
+        print("  Example: ricochet report --all", file=sys.stderr)
+        return 2
+
+    # Get findings
+    if args.correlation_id:
+        # Single finding by correlation ID
+        findings = store.get_findings()
+        finding = None
+        for f in findings:
+            if f.correlation_id == args.correlation_id:
+                finding = f
+                break
+
+        if finding is None:
+            print(f"Error: No finding found for correlation ID: {args.correlation_id}", file=sys.stderr)
+            print("Run 'ricochet findings' to see available findings", file=sys.stderr)
+            return 2
+
+        # Generate report
+        report = generate_report(finding)
+
+        # Output
+        if args.output:
+            args.output.write_text(report)
+            print(f"Report written to: {args.output}")
+        else:
+            print(report)
+
+        return 0
+
+    elif args.all:
+        # All findings
+        findings = store.get_findings()
+
+        if not findings:
+            print("No findings available. Run 'ricochet findings' to see available findings.", file=sys.stderr)
+            return 0
+
+        # Generate reports for all
+        reports_generated = 0
+
+        for finding in findings:
+            report = generate_report(finding)
+
+            # Determine output file name
+            if args.output:
+                # Use output as directory
+                output_dir = args.output
+                output_dir.mkdir(parents=True, exist_ok=True)
+                output_file = output_dir / f"{finding.correlation_id}.md"
+            else:
+                # Current directory
+                output_file = Path(f"{finding.correlation_id}.md")
+
+            output_file.write_text(report)
+            print(f"[+] Generated: {output_file}")
+            reports_generated += 1
+
+        print()
+        print(f"=== Summary ===")
+        print(f"Reports generated: {reports_generated}")
+        print(f"Output location: {args.output if args.output else Path.cwd()}")
+
+        return 0
 
     return 0
 
