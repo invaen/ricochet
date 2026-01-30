@@ -110,13 +110,13 @@ Plans:
   3. Tool generates SSTI payloads that callback when template engine processes them
   4. Polyglot payloads work across multiple contexts without modification
   5. Each payload type includes correlation ID for tracking
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 06-01: XSS payload generator with callback embedding
-- [ ] 06-02: SQLi OOB payload generator
-- [ ] 06-03: SSTI payload generator
-- [ ] 06-04: Polyglot payload generation
+- [ ] 06-01-PLAN.md — XSS payload generator with callback embedding
+- [ ] 06-02-PLAN.md — SQLi OOB payload generator (MSSQL, MySQL, Oracle, PostgreSQL)
+- [ ] 06-03-PLAN.md — SSTI payload generator (Jinja2, Freemarker, Twig)
+- [ ] 06-04-PLAN.md — Polyglot payload generator and module consolidation
 
 ### Phase 7: Correlation & Output
 **Goal**: Tool correlates callbacks with injections and outputs findings in multiple formats
@@ -166,6 +166,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 3. DNS & External Callbacks | 2/2 | Complete | 2026-01-30 |
 | 4. Injection Engine | 3/3 | Complete | 2026-01-30 |
 | 5. Crawler & Payloads | 2/2 | Complete | 2026-01-30 |
-| 6. Vulnerability Payloads | 0/4 | Not started | - |
+| 6. Vulnerability Payloads | 0/4 | Planned | - |
 | 7. Correlation & Output | 0/3 | Not started | - |
 | 8. Triggers & Reporting | 0/5 | Not started | - |
