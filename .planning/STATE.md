@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 7 of 8 (Correlation & Output)
-Plan: 3 of 3 in current phase
-Status: In progress
-Last activity: 2026-01-30 - Completed 07-03-PLAN.md
+Plan: 3 of 3 (phase complete)
+Status: Phase 7 complete
+Last activity: 2026-01-30 - Completed 07-02-PLAN.md
 
-Progress: [██████████████████████████░░░░] 83%
+Progress: [████████████████████████████░░] 91%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 19
+- Total plans completed: 20
 - Average duration: 2.3 min
-- Total execution time: 43 min
+- Total execution time: 45 min
 
 **By Phase:**
 
@@ -33,11 +33,11 @@ Progress: [███████████████████████
 | 4 | 3/3 | 12 min | 4.0 min |
 | 5 | 2/2 | 4 min | 2.0 min |
 | 6 | 4/4 | 8 min | 2.0 min |
-| 7 | 3/3 | 6 min | 2.0 min |
+| 7 | 3/3 | 8 min | 2.7 min |
 
 **Recent Trend:**
 - Last 5 plans: 2, 2, 2, 2, 2 min
-- Trend: Consistent 2 min for correlation and generators
+- Trend: Consistent 2 min for correlation and output
 
 *Updated after each plan completion*
 
@@ -93,6 +93,9 @@ Recent decisions affecting current work:
 - [07-01]: Post-query severity filtering - keeps SQL simple, filter in Python
 - [07-03]: ProxyHandler added before HTTPS handler in opener chain
 - [07-03]: Disable environment proxy detection when no --proxy specified
+- [07-02]: JSONL format (one JSON object per line) for pipeline compatibility
+- [07-02]: Severity icons: [!]=high, [+]=medium, [*]=low, [-]=info
+- [07-02]: Logs to stderr, findings to stdout for stream separation
 
 ### Pending Todos
 
@@ -105,5 +108,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Completed 07-03-PLAN.md
+Stopped at: Completed 07-02-PLAN.md (Phase 7 complete)
 Resume file: None
