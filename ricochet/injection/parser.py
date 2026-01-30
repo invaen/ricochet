@@ -1,9 +1,10 @@
 """Burp request file parser for extracting HTTP request components."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from http.client import parse_headers
 from io import BytesIO
 from typing import Optional
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 
 @dataclass
@@ -115,3 +116,59 @@ def parse_request_string(content: str) -> ParsedRequest:
     normalized = content.replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\r\n')
 
     return parse_request_file(normalized.encode('utf-8'))
+
+
+def build_url(request: ParsedRequest, use_https: bool = False) -> str:
+    """Construct a full URL from a ParsedRequest.
+
+    Args:
+        request: ParsedRequest with host and path
+        use_https: If True, use https:// scheme; otherwise http://
+
+    Returns:
+        Full URL string (e.g., "http://example.com:8080/api?id=123")
+    """
+    scheme = "https" if use_https else "http"
+    return f"{scheme}://{request.host}{request.path}"
+
+
+def inject_into_path(request: ParsedRequest, param: str, value: str) -> ParsedRequest:
+    """Replace a query parameter value in the request path.
+
+    Creates a new ParsedRequest with the modified path; does not mutate
+    the original request.
+
+    Args:
+        request: Original ParsedRequest
+        param: Name of the query parameter to replace
+        value: New value for the parameter
+
+    Returns:
+        New ParsedRequest with the modified path
+    """
+    parsed_url = urlparse(request.path)
+
+    # Parse existing query params
+    params = parse_qsl(parsed_url.query, keep_blank_values=True)
+
+    # Replace the target parameter's value
+    new_params = []
+    for name, val in params:
+        if name == param:
+            new_params.append((name, value))
+        else:
+            new_params.append((name, val))
+
+    # Reconstruct the URL
+    new_query = urlencode(new_params)
+    new_url = urlunparse((
+        parsed_url.scheme,
+        parsed_url.netloc,
+        parsed_url.path,
+        parsed_url.params,
+        new_query,
+        parsed_url.fragment,
+    ))
+
+    # Create new ParsedRequest with modified path (using dataclass replace)
+    return replace(request, path=new_url)
