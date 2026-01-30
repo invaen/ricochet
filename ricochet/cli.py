@@ -124,6 +124,12 @@ def create_parser() -> argparse.ArgumentParser:
         type=Path,
         help='Burp-format request file'
     )
+    target_group.add_argument(
+        '--from-crawl',
+        type=Path,
+        metavar='FILE',
+        help='Use vectors from crawl export JSON file'
+    )
 
     # Parameter specification (optional with -u, ignored with -r)
     inject_parser.add_argument(
@@ -181,6 +187,48 @@ def create_parser() -> argparse.ArgumentParser:
     )
 
     inject_parser.set_defaults(func=cmd_inject)
+
+    # Crawl command - web crawler for injection point discovery
+    crawl_parser = subparsers.add_parser(
+        'crawl',
+        help='Crawl website to discover injection points'
+    )
+    crawl_parser.add_argument(
+        '-u', '--url',
+        required=True,
+        help='Seed URL to start crawling from'
+    )
+    crawl_parser.add_argument(
+        '--depth',
+        type=int,
+        default=2,
+        help='Maximum crawl depth (default: 2)'
+    )
+    crawl_parser.add_argument(
+        '--max-pages',
+        type=int,
+        default=100,
+        help='Maximum pages to crawl (default: 100)'
+    )
+    crawl_parser.add_argument(
+        '--timeout',
+        type=float,
+        default=10.0,
+        help='Request timeout in seconds (default: 10)'
+    )
+    crawl_parser.add_argument(
+        '--rate',
+        type=float,
+        default=10.0,
+        help='Requests per second (default: 10)'
+    )
+    crawl_parser.add_argument(
+        '--export',
+        type=Path,
+        metavar='FILE',
+        help='Export discovered vectors to JSON file'
+    )
+    crawl_parser.set_defaults(func=cmd_crawl)
 
     return parser
 
@@ -288,6 +336,259 @@ def cmd_interactsh(args, store) -> int:
     return 0
 
 
+def cmd_crawl(args, store) -> int:
+    """Handle crawl subcommand - crawl website to discover injection points.
+
+    Args:
+        args: Parsed command line arguments.
+        store: InjectionStore instance (not used directly but passed for consistency).
+
+    Returns:
+        Exit code (0 for success, 1 for errors, 2 for argument errors).
+    """
+    from ricochet.injection.crawler import (
+        Crawler,
+        export_vectors,
+        results_to_vectors,
+    )
+
+    print(f"Crawling {args.url}")
+    print(f"  Max depth: {args.depth}")
+    print(f"  Max pages: {args.max_pages}")
+    print(f"  Rate: {args.rate} req/s")
+    print()
+
+    crawler = Crawler(
+        max_depth=args.depth,
+        max_pages=args.max_pages,
+        timeout=args.timeout,
+        rate_limit=args.rate,
+    )
+
+    results = crawler.crawl(args.url)
+
+    # Display crawl results
+    pages_crawled = 0
+    pages_errored = 0
+    total_forms = 0
+    total_links = 0
+
+    for result in results:
+        if result.error:
+            pages_errored += 1
+            print(f"[-] {result.url}")
+            print(f"    Error: {result.error}")
+        else:
+            pages_crawled += 1
+            total_forms += len(result.forms)
+            total_links += len(result.links)
+            print(f"[+] {result.url}")
+            print(f"    Forms: {len(result.forms)}, Links: {len(result.links)}")
+        print()
+
+    # Convert to vectors
+    vectors = results_to_vectors(results)
+
+    # Summary
+    print("=== Crawl Summary ===")
+    print(f"Pages crawled: {pages_crawled}")
+    print(f"Pages errored: {pages_errored}")
+    print(f"Forms found: {total_forms}")
+    print(f"Links found: {total_links}")
+    print(f"Injection vectors: {len(vectors)}")
+
+    if vectors:
+        print()
+        print("=== Discovered Vectors ===")
+        for v in vectors:
+            print(f"  [{v.method}] {v.url}")
+            print(f"       param: {v.param_name} ({v.param_type}) [{v.location}]")
+
+    # Export if requested
+    if args.export:
+        export_vectors(vectors, args.export)
+        print()
+        print(f"Exported {len(vectors)} vector(s) to {args.export}")
+        print()
+        print("Use with inject command:")
+        print(f"  ricochet inject --from-crawl {args.export} --callback-url <url>")
+
+    return 0
+
+
+def _cmd_inject_from_crawl(args, store) -> int:
+    """Handle inject --from-crawl mode.
+
+    Injects payloads into vectors discovered during crawling.
+    Each crawl vector specifies its own URL, method, and parameter.
+
+    Args:
+        args: Parsed command line arguments with from_crawl set.
+        store: InjectionStore instance.
+
+    Returns:
+        Exit code (0 for success, 1 for errors, 2 for argument errors).
+    """
+    from ricochet.injection.crawler import CrawlVector, load_crawl_vectors
+    from ricochet.injection.http_client import send_request, prepare_headers_for_body
+    from ricochet.injection.injector import substitute_callback
+    from ricochet.injection.rate_limiter import RateLimiter
+    from ricochet.core.store import InjectionRecord
+    from urllib.parse import urlparse, urlencode, parse_qs
+
+    # Load crawl vectors
+    if not args.from_crawl.exists():
+        print(f"Error: Crawl vector file not found: {args.from_crawl}", file=sys.stderr)
+        return 2
+
+    try:
+        crawl_vectors = load_crawl_vectors(args.from_crawl)
+    except (ValueError, FileNotFoundError) as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 2
+
+    if not crawl_vectors:
+        print("Warning: No vectors found in crawl file", file=sys.stderr)
+        return 0
+
+    print(f"Loaded {len(crawl_vectors)} vector(s) from {args.from_crawl}")
+    print()
+
+    # Load payloads
+    if hasattr(args, 'payloads') and args.payloads:
+        if not args.payloads.exists():
+            print(f"Error: Payloads file not found: {args.payloads}", file=sys.stderr)
+            return 2
+
+        try:
+            from ricochet.injection.payloads import load_payloads
+            payloads = load_payloads(args.payloads)
+        except UnicodeDecodeError as e:
+            print(f"Error: Failed to read payloads file: {e}", file=sys.stderr)
+            return 2
+
+        if not payloads:
+            print("Warning: No payloads found in file", file=sys.stderr)
+            return 0
+
+        print(f"Loaded {len(payloads)} payload(s)")
+        print()
+    else:
+        payloads = [args.payload]
+
+    if args.dry_run:
+        print("=== DRY RUN MODE ===")
+        print()
+
+    # Create rate limiter
+    rate_limiter = RateLimiter(rate=args.rate, burst=1)
+
+    # Track results
+    successful = 0
+    failed = 0
+
+    for cv in crawl_vectors:
+        for payload in payloads:
+            # Generate callback URL with correlation ID
+            callback_with_id, correlation_id = substitute_callback(
+                payload, args.callback_url
+            )
+
+            # Build the request based on vector location
+            parsed = urlparse(cv.url)
+            use_https = parsed.scheme == "https"
+
+            if cv.location == "query":
+                # Inject into query string
+                query_params = parse_qs(parsed.query, keep_blank_values=True)
+                # Set the parameter (replace if exists)
+                query_params[cv.param_name] = [callback_with_id]
+                new_query = urlencode(query_params, doseq=True)
+                target_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}?{new_query}"
+                method = cv.method
+                body = None
+            elif cv.location == "body":
+                # Inject into POST body
+                target_url = cv.url
+                method = cv.method
+                body = urlencode({cv.param_name: callback_with_id}).encode()
+            else:
+                # Default: treat as query
+                target_url = f"{cv.url}?{cv.param_name}={callback_with_id}"
+                method = cv.method
+                body = None
+
+            # Build headers
+            headers = {
+                "Host": parsed.netloc,
+                "User-Agent": "Ricochet/1.0",
+            }
+            if body:
+                headers["Content-Type"] = "application/x-www-form-urlencoded"
+                headers = prepare_headers_for_body(headers, body)
+
+            # Record injection
+            record = InjectionRecord(
+                id=correlation_id,
+                target_url=target_url,
+                parameter=cv.param_name,
+                payload=callback_with_id,
+                timestamp=time.time(),
+                context=f"crawl:{cv.location}:{cv.method}",
+            )
+            store.record_injection(record)
+
+            if args.dry_run:
+                print(f"[*] {cv.location}:{cv.param_name}")
+                print(f"    Correlation ID: {correlation_id}")
+                print(f"    URL: {target_url}")
+                print(f"    Method: {method}")
+                print(f"    Status: DRY-RUN")
+                print()
+                successful += 1
+                continue
+
+            # Rate limit
+            rate_limiter.acquire()
+
+            # Send request
+            try:
+                response = send_request(
+                    url=target_url,
+                    method=method,
+                    headers=headers,
+                    body=body,
+                    timeout=args.timeout,
+                    verify_ssl=False,
+                )
+                print(f"[+] {cv.location}:{cv.param_name}")
+                print(f"    Correlation ID: {correlation_id}")
+                print(f"    URL: {target_url}")
+                print(f"    Status: HTTP {response.status}")
+                print()
+                successful += 1
+
+            except (TimeoutError, ConnectionError) as e:
+                print(f"[-] {cv.location}:{cv.param_name}")
+                print(f"    Correlation ID: {correlation_id}")
+                print(f"    URL: {target_url}")
+                print(f"    Error: {e}")
+                print()
+                failed += 1
+
+    # Summary
+    print("=== Summary ===")
+    print(f"Total: {successful + failed} injection(s)")
+    print(f"Successful: {successful}")
+    print(f"Failed: {failed}")
+
+    if args.dry_run:
+        print()
+        print("Note: No requests were sent (dry-run mode)")
+
+    return 0 if failed == 0 else 1
+
+
 def cmd_inject(args, store) -> int:
     """Handle inject subcommand - inject payloads into targets.
 
@@ -305,8 +606,12 @@ def cmd_inject(args, store) -> int:
         parse_request_string,
     )
     from ricochet.injection.rate_limiter import RateLimiter
-    from ricochet.injection.vectors import extract_vectors
+    from ricochet.injection.vectors import InjectionVector, extract_vectors
     from urllib.parse import urlparse
+
+    # Handle --from-crawl mode (different injection approach)
+    if hasattr(args, 'from_crawl') and args.from_crawl:
+        return _cmd_inject_from_crawl(args, store)
 
     # Build or parse request
     if args.url:
@@ -352,7 +657,7 @@ def cmd_inject(args, store) -> int:
             print(f"Error: Failed to parse request file: {e}", file=sys.stderr)
             return 2
     else:
-        print("Error: Specify -u URL or -r request.txt", file=sys.stderr)
+        print("Error: Specify -u URL, -r request.txt, or --from-crawl vectors.json", file=sys.stderr)
         return 2
 
     # Create rate limiter and injector
