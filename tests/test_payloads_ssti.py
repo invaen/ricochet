@@ -101,4 +101,4 @@ class TestSSTIPayloadGenerator:
 
     def test_engines_list_class_attribute(self):
         """ENGINES class attribute should list supported engines."""
-        assert SSTIPayloadGenerator.ENGINES == ["jinja2", "freemarker", "twig"]
+        assert SSTIPayloadGenerator.ENGINES == ["jinja2", "freemarker", "twig", "erb", "velocity", "mako"]
