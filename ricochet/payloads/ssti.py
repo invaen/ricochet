@@ -39,14 +39,15 @@ class SSTIPayloadGenerator:
     """
 
     vuln_type = "ssti"
-    ENGINES = ["jinja2", "freemarker", "twig"]
+    ENGINES = ["jinja2", "freemarker", "twig", "erb", "velocity", "mako"]
 
     def __init__(self, engine: Optional[str] = None):
         """Initialize SSTI payload generator.
 
         Args:
-            engine: Specific template engine to target (jinja2, freemarker, twig).
-                   If None, generates payloads for all supported engines.
+            engine: Specific template engine to target (jinja2, freemarker, twig,
+                   erb, velocity, mako). If None, generates payloads for all
+                   supported engines.
 
         Raises:
             ValueError: If specified engine is not supported.

