@@ -43,8 +43,9 @@ class XSSPayloadGenerator:
             - context: Context hint (e.g., "html") for payload formatting
         """
         builtin_path = Path(__file__).parent / "builtin" / "xss-callback.txt"
-        for payload in load_payloads(builtin_path):
-            yield (payload, "html")
+        if builtin_path.exists():
+            for payload in load_payloads(builtin_path):
+                yield (payload, "html")
 
     def generate_exfil(self, callback_url: str) -> Iterator[tuple[str, str]]:
         """Generate XSS payloads that exfiltrate metadata.
@@ -61,5 +62,6 @@ class XSSPayloadGenerator:
             - context: "html:exfil" indicating metadata-capturing payload
         """
         builtin_path = Path(__file__).parent / "builtin" / "xss-exfil.txt"
-        for payload in load_payloads(builtin_path):
-            yield (payload, "html:exfil")
+        if builtin_path.exists():
+            for payload in load_payloads(builtin_path):
+                yield (payload, "html:exfil")

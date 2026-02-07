@@ -36,5 +36,8 @@ Issues = "https://github.com/invaen/ricochet/issues"
 [project.scripts]
 ricochet = "ricochet.cli:main"
 
+[tool.setuptools.package-data]
+ricochet = ["payloads/builtin/*.txt"]
+
 [tool.setuptools.packages.find]
 include = ["ricochet*"]

@@ -945,8 +945,9 @@ def _cmd_inject_from_crawl(args, store) -> int:
     for cv in crawl_vectors:
         for payload in payloads:
             # Generate callback URL with correlation ID
-            callback_with_id, correlation_id = substitute_callback(
-                payload, args.callback_url
+            correlation_id = secrets.token_hex(8)
+            callback_with_id = substitute_callback(
+                payload, args.callback_url, correlation_id
             )
 
             # Build the request based on vector location
