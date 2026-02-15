@@ -78,7 +78,7 @@ class DNSHandler(socketserver.BaseRequestHandler):
             response = self._build_response(txn_id, data, qname, qtype)
             socket.sendto(response, self.client_address)
 
-        except Exception as e:
+        except (struct.error, UnicodeDecodeError, OSError) as e:
             logger.error("Error handling DNS query from %s: %s", client_ip, e)
 
     def _parse_question(self, data: bytes, offset: int) -> tuple[Optional[str], int, int]:

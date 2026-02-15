@@ -197,7 +197,7 @@ class Injector:
                 error=f"Connection error: {e}",
             )
 
-        except Exception as e:
+        except (OSError, ValueError, RuntimeError) as e:
             return InjectionResult(
                 correlation_id=correlation_id,
                 vector=vector,

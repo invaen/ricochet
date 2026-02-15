@@ -194,7 +194,7 @@ class LinkFormExtractor(HTMLParser):
         self._reset_state()
         try:
             self.feed(html)
-        except Exception:
+        except (ValueError, AssertionError):
             # Malformed HTML - return what we have
             pass
 
@@ -408,7 +408,7 @@ class Crawler:
             # Parse HTML
             try:
                 html = response.body.decode("utf-8", errors="replace")
-            except Exception as e:
+            except (UnicodeDecodeError, AttributeError) as e:
                 return CrawlResult(
                     url=url,
                     depth=depth,
@@ -430,7 +430,7 @@ class Crawler:
         except ConnectionError as e:
             return CrawlResult(url=url, depth=depth, error=str(e))
 
-        except Exception as e:
+        except (OSError, ValueError, RuntimeError) as e:
             return CrawlResult(url=url, depth=depth, error=f"Unexpected error: {e}")
 
 
