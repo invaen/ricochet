@@ -10,6 +10,17 @@ from typing import Optional
 from ricochet.output.finding import Finding
 
 
+def _to_bytes(value) -> Optional[bytes]:
+    """Convert a database value to bytes, handling TEXT/BLOB column migration."""
+    if value is None:
+        return None
+    if isinstance(value, bytes):
+        return value
+    if isinstance(value, str):
+        return value.encode('utf-8', errors='surrogateescape')
+    return bytes(value)
+
+
 def get_db_path() -> Path:
     """Get the default database path, creating parent directory if needed.
 
@@ -86,7 +97,7 @@ class InjectionStore:
                     source_ip TEXT,
                     request_path TEXT,
                     headers TEXT,
-                    body TEXT,
+                    body BLOB,
                     received_at REAL NOT NULL,
                     FOREIGN KEY (correlation_id) REFERENCES injections(id)
                 );
@@ -242,7 +253,7 @@ class InjectionStore:
                 source_ip=row['source_ip'],
                 request_path=row['request_path'],
                 headers=json.loads(row['headers']) if row['headers'] else {},
-                body=row['body'].encode() if isinstance(row['body'], str) else row['body'],
+                body=_to_bytes(row['body']),
                 received_at=row['received_at']
             )
             for row in rows
@@ -341,7 +352,7 @@ class InjectionStore:
                 source_ip=row['source_ip'],
                 request_path=row['request_path'],
                 callback_headers=json.loads(row['callback_headers']) if row['callback_headers'] else {},
-                callback_body=row['callback_body'].encode() if isinstance(row['callback_body'], str) else row['callback_body'],
+                callback_body=_to_bytes(row['callback_body']),
                 received_at=row['received_at'],
                 delay_seconds=row['delay_seconds']
             )

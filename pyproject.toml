@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ricochet"
-version = "1.1.0"
+version = "1.1.1"
 description = "Second-order vulnerability detection for bug bounty hunters"
 readme = "README.md"
 license = {text = "MIT"}
