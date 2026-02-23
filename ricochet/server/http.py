@@ -156,17 +156,6 @@ class CallbackServer(ThreadingHTTPServer):
         """
         super().__init__(server_address, CallbackHandler)
         self.store = store
-        self.timeout = 0.5  # For responsive shutdown
-        self._shutdown_event = threading.Event()
-
-    def serve_until_shutdown(self) -> None:
-        """Serve requests until shutdown is requested."""
-        while not self._shutdown_event.is_set():
-            self.handle_request()
-
-    def request_shutdown(self) -> None:
-        """Request the server to stop serving."""
-        self._shutdown_event.set()
 
 
 def run_callback_server(host: str, port: int, store: 'InjectionStore') -> int:
@@ -184,9 +173,8 @@ def run_callback_server(host: str, port: int, store: 'InjectionStore') -> int:
 
     def signal_handler(signum, frame):
         logger.info("Shutdown signal received")
-        server.request_shutdown()
+        threading.Thread(target=server.shutdown, daemon=True).start()
 
-    # Set up signal handlers for graceful shutdown
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
@@ -194,7 +182,7 @@ def run_callback_server(host: str, port: int, store: 'InjectionStore') -> int:
     logger.info("Callback server started on %s:%d", host, port)
 
     try:
-        server.serve_until_shutdown()
+        server.serve_forever()
     finally:
         server.server_close()
         logger.info("Callback server stopped")
