@@ -2,6 +2,7 @@
 
 import json
 from io import StringIO
+from typing import Optional
 
 import pytest
 
@@ -10,7 +11,7 @@ from ricochet.output.formatters import output_json, output_text
 from ricochet.payloads.xss import XSSPayloadGenerator
 
 
-def make_finding(callback_body: bytes | None = None, context: str = "xss") -> Finding:
+def make_finding(callback_body: Optional[bytes] = None, context: str = "xss") -> Finding:
     """Create a Finding with specified callback body."""
     return Finding(
         correlation_id="test123",

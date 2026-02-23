@@ -46,7 +46,7 @@ class Finding:
         return 'info'
 
     @property
-    def metadata(self) -> dict | None:
+    def metadata(self) -> Optional[dict]:
         """Extract metadata from callback body if present.
 
         XSS exfiltration payloads send JSON with captured data.
